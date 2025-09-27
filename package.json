@@ -1,6 +1,8 @@
 {
   "name": "stagepass-client",
   "version": "0.1.0",
+  "author": "Augusto Souza",
+  "description": "StagePass is a full-stack ticketing platform designed for event creation, ticket sales, and secure online purchases. Built with Next.js, NextAuth, TalwindCSS, React Hook Form, Zod, and Jest, the project focuses on solving real-world challenges such as ticket reservation concurrency, payment integration, and background processing.",
   "private": true,
   "scripts": {
     "dev": "next dev",
