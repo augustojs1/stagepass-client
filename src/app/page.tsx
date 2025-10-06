@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <section>
-      <h1 className="font-logo font-bold text-[18px]">Logo</h1>
+      <h1>Home</h1>
     </section>
   );
 }
