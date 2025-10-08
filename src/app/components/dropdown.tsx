@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
 interface DropdownProps {
   trigger: React.ReactNode;
@@ -41,12 +42,12 @@ export function Dropdown({ trigger, items, align = "right" }: DropdownProps) {
           {items.map((item, index) => (
             <li key={index}>
               {item.href ? (
-                <a
+                <Link
                   href={item.href}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
                 >
                   {item.label}
-                </a>
+                </Link>
               ) : (
                 <button
                   onClick={item.onClick}
