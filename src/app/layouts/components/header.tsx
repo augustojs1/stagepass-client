@@ -63,7 +63,7 @@ export function Header() {
               <Link href="/login">
                 <Button variant="secondary">Log In</Button>
               </Link>
-              <Link href="/sign-in">
+              <Link href="/sign-up">
                 <Button variant="primary">Sign Up</Button>
               </Link>
             </div>

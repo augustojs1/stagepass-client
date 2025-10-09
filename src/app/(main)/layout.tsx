@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
-import { Header } from "./layouts/components";
-import { font_body, font_display, font_logo } from "../fonts";
+import { Header } from "../layouts/components";
+import { font_body, font_display, font_logo } from "../../fonts";
 
-import "./globals.css";
+import "../globals.css";
 
 export const metadata: Metadata = {
   title: "StagePass | Home",
