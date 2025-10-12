@@ -24,7 +24,7 @@ export function Header() {
   ];
 
   return (
-    <header className="shadow-light ">
+    <header className="shadow-light">
       <div className="max-w-[86rem] p-[1rem] m-auto grid md:grid-cols-3 grid-cols-2">
         <div className="flex align-center">
           <div className="flex items-center md:hidden mr-2">

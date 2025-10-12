@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { Header } from "../layouts/components";
+import { Footer, Header } from "@/app/layouts/components";
 import { font_body, font_display, font_logo } from "../../fonts";
 
 import "../globals.css";
@@ -19,7 +19,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Header />
-        <main className="max-w-[86rem] p-[1rem] m-auto">{children}</main>
+        <main className="m-auto">{children}</main>
+        <Footer />
       </body>
     </html>
   );
