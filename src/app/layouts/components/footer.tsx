@@ -7,9 +7,9 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-black-3">
-      <div className="max-w-[86rem] w-full m-auto py-10 grid grid-cols-3 items-center justify-between">
-        <div className="flex items-center cursor-pointer">
+    <footer className="bg-black-3 px-4">
+      <div className="max-w-[86rem] w-full m-auto py-10 grid grid-cols-1 md:grid-cols-3 items-center justify-center md:justify-between">
+        <div className="flex items-center md:justify-start justify-center cursor-pointer mb-4">
           <Link href="/" className="flex">
             <Image
               className="w-[35px] h-[30px] md:w-[47px] md:h-[42px] object-contain"
@@ -24,12 +24,12 @@ export function Footer() {
             </h1>
           </Link>
         </div>
-        <div>
+        <div className="text-center mb-4">
           <p className="text-gray-4">
             ©{currentYear} • Made with ❤️ by Augusto Souza
           </p>
         </div>
-        <div className="flex gap-2 justify-end">
+        <div className="flex gap-2 md:justify-end justify-center">
           <a
             className="cursor-pointer p-2"
             href="https://www.linkedin.com/in/augustosouza1/"

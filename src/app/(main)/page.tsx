@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       {/* Banner */}
-      <section className="bg-[url(/images/explore-cover.png)] bg-cover bg-center bg-no-repea md:h-[400px] h-[300px] md:mb-[75px] mb-[50px] p-[1rem]">
+      <section className="bg-[url(/images/explore-cover.png)] bg-cover bg-center bg-no-repea md:h-[400px] h-[300px] md:mb-[110px] mb-[80px] p-[1rem]">
         <div className="flex justify-center items-center h-full text-center">
           <h1 className="font-logo sm:text-[56px] text-[40px] font-bold text-white">
             Pick up your <br />
@@ -19,14 +19,14 @@ export default function Home() {
       </section>
 
       {/* Events in your area */}
-      <section className="max-w-[86rem] m-auto mb-[100px]">
+      <section className="max-w-[86rem] m-auto md:mb-[110px] mb-[80px] px-4">
         <div className="flex justify-between mb-[30px]">
           <h1 className="font-logo md:text-[32px] text-[24px] font-bold text-black-3">
             Events in <span className="text-primary">your area</span>
           </h1>
           <Button variant="secondary">View More</Button>
         </div>
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 justify-center gap-4 md:gap-8">
           <EventCard />
           <EventCard />
           <EventCard />
@@ -34,13 +34,13 @@ export default function Home() {
       </section>
 
       {/* Explore by categories */}
-      <section className="max-w-[86rem] m-auto">
+      <section className="max-w-[86rem] m-auto px-4 md:mb-[110px] mb-[80px]">
         <div className="mb-[30px]">
           <h1 className="font-logo md:text-[32px] text-[24px] font-bold text-black-3">
             Explore by <span className="text-primary">categories</span>
           </h1>
         </div>
-        <div className="grid grid-cols-5 gap-2 mb-[100px]">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
           <CategoryCard category="music" />
           <CategoryCard category="sport" />
           <CategoryCard category="exhibition" />
@@ -50,7 +50,7 @@ export default function Home() {
       </section>
 
       {/* Upcoming in 24h */}
-      <section className="py-[60px] bg-gray-6">
+      <section className="px-4 bg-gray-6 md:mb-[110px] mb-[80px]">
         <div className="max-w-[86rem] m-auto">
           <div className="flex justify-between mb-[30px]">
             <h1 className="font-logo md:text-[32px] text-[24px] font-bold text-black-3 ">
@@ -58,7 +58,7 @@ export default function Home() {
             </h1>
             <Button variant="secondary">View More</Button>
           </div>
-          <div className="flex justify-between mb-[100px]">
+          <div className="flex flex-col gap-4 md:flex-row md:gap-0 justify-between">
             <EventCard />
             <EventCard />
           </div>
@@ -66,7 +66,7 @@ export default function Home() {
       </section>
 
       {/* Highlights this weeks */}
-      <section className="py-[60px] bg-white">
+      <section className="bg-white md:mb-[110px] mb-[80px] px-4">
         <div className="max-w-[86rem] m-auto">
           <div className="flex justify-between mb-[30px]">
             <h1 className="font-logo md:text-[32px] text-[24px] font-bold text-black-3 ">
@@ -81,7 +81,7 @@ export default function Home() {
       </section>
 
       {/* More events */}
-      <section className="py-[60px] bg-white">
+      <section className="md:mb-[110px] mb-[80px] bg-white px-4">
         <div className="max-w-[86rem] m-auto">
           <div className="flex justify-between mb-[30px]">
             <h1 className="font-logo md:text-[32px] text-[24px] font-bold text-black-3">
@@ -89,7 +89,7 @@ export default function Home() {
             </h1>
             <Button variant="secondary">View More</Button>
           </div>
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
             <EventCard />
             <EventCard />
             <EventCard />

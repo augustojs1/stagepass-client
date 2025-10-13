@@ -5,8 +5,8 @@ import { Calendar, MapPin } from "lucide-react";
 
 export function EventBanner() {
   return (
-    <div className="w-full bg-gray-1 p-[60px]">
-      <div className="max-w-[445px] py-[45px] px-[31px] bg-white rounded-[6px]">
+    <div className="w-full bg-gray-1 p-[30px] md:p-[60px]">
+      <div className="max-w-[445px] py-[22px] md:py-[45px] px-[15px] md:px-[31px] bg-white rounded-[6px]">
         <p className="text-primary text-[14px] font-bold mb-[14px]">From $8</p>
         <h2 className="text-[20px] font-bold text-black-3 mb-2">
           Brushstrokes & Beyond: An Oil Painting Odyssey
