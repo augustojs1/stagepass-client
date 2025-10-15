@@ -8,9 +8,15 @@ export function Footer() {
 
   return (
     <footer className="bg-black-3 px-4">
-      <div className="max-w-[86rem] w-full m-auto py-10 grid grid-cols-1 md:grid-cols-3 items-center justify-center md:justify-between">
-        <div className="flex items-center md:justify-start justify-center cursor-pointer mb-4">
-          <Link href="/" className="flex">
+      <div
+        className="
+    max-w-[86rem] w-full m-auto py-10
+    grid grid-cols-1 md:grid-cols-[1fr_auto_1fr]
+    items-center gap-4
+  "
+      >
+        <div className="flex items-center md:justify-start justify-center">
+          <Link href="/" className="flex items-center cursor-pointer">
             <Image
               className="w-[35px] h-[30px] md:w-[47px] md:h-[42px] object-contain"
               src={"/stagepass.svg"}
@@ -19,13 +25,13 @@ export function Footer() {
               alt="StagePass"
               priority
             />
-            <h1 className="font-logo font-bold text-[18px] text-white self-center">
+            <h1 className="font-logo font-bold text-[18px] text-white ml-2">
               Stage<span className="text-primary">Pass</span>
             </h1>
           </Link>
         </div>
-        <div className="text-center mb-4">
-          <p className="text-gray-4">
+        <div className="flex justify-center">
+          <p className="text-gray-4 text-center">
             ©{currentYear} • Made with ❤️ by Augusto Souza
           </p>
         </div>
