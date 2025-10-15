@@ -50,7 +50,7 @@ export default function Home() {
       </section>
 
       {/* Upcoming in 24h */}
-      <section className="px-4 bg-gray-6 md:mb-[110px] mb-[80px]">
+      <section className="px-4 bg-gray-6 md:mb-[110px] mb-[80px] py-10">
         <div className="max-w-[86rem] m-auto">
           <div className="flex justify-between mb-[30px]">
             <h1 className="font-logo md:text-[32px] text-[24px] font-bold text-black-3 ">

@@ -20,8 +20,6 @@ export function EventsFilter() {
         <h4 className="text-[1.3rem] text-black-3 font-bold">Filter</h4>
       </div>
       <hr className="text-gray-5 my-4" />
-
-      {/* Categories */}
       <div className="px-4">
         <p className="text-[1rem] text-black-3 font-bold mb-2">Category</p>
         <CheckboxGroup
@@ -42,8 +40,6 @@ export function EventsFilter() {
         />
         <hr className="text-gray-5 my-4" />
       </div>
-
-      {/* Pricing */}
       <div className="px-4">
         <p className="text-[1rem] text-black-3 font-bold mb-2">Pricing</p>
         <CheckboxGroup
@@ -58,8 +54,6 @@ export function EventsFilter() {
         />
         <hr className="text-gray-5 my-4" />
       </div>
-
-      {/* Distance */}
       <div className="px-4">
         <p className="text-[1rem] text-black-3 font-bold mb-8">Distance</p>
         <Slider
@@ -73,8 +67,6 @@ export function EventsFilter() {
         />
         <hr className="text-gray-5 my-4" />
       </div>
-
-      {/* Ticket Price */}
       <div className="px-4">
         <p className="text-[1rem] text-black-3 font-bold mb-8">Ticket Price</p>
         <Slider
@@ -88,8 +80,6 @@ export function EventsFilter() {
         />
         <hr className="text-gray-5 my-4" />
       </div>
-
-      {/* Button filter */}
       <div className="flex justify-between px-4">
         <Button variant="secondary">Clear All</Button>
         <Button variant="primary">Apply</Button>

@@ -9,7 +9,7 @@ import { ExploreEventCard } from "./explore-event-card";
 
 export function ExploreContent() {
   const [isMobile, setIsMobile] = React.useState<boolean>(false);
-  const [showFilter, setShowFilter] = React.useState<boolean>(true);
+  const [showFilter, setShowFilter] = React.useState<boolean>(false);
 
   function getWindowDimensions() {
     const { innerWidth: width, innerHeight: height } = window;
@@ -24,7 +24,7 @@ export function ExploreContent() {
     function handleResize() {
       const size = getWindowDimensions();
 
-      if (size.width <= 767) {
+      if (size.width >= 767) {
         setIsMobile(true);
       }
     }
@@ -42,11 +42,11 @@ export function ExploreContent() {
   }
 
   return (
-    <>
+    <section className="mb-20">
       <div className="flex justify-center items-center mb-[2.7rem] gap-4">
         <SearchInput />
         <button
-          className="flex md:hidden justify-center items-center border border-primary rounded-[6px] w-14 h-14"
+          className="flex md:hidden justify-center items-center border border-primary rounded-[6px] w-12 h-12"
           onClick={handleShowFilter}
         >
           <ListFilter size={18} color="#636ae8" />
@@ -73,6 +73,6 @@ export function ExploreContent() {
           <ExploreEventCard />
         </div>
       </div>
-    </>
+    </section>
   );
 }
