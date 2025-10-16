@@ -12,6 +12,7 @@ import {
 
 import { Button } from "@/app/components/ui/form/button";
 import { Input, TextArea } from "@/app/components";
+import { Select } from "@/app/components/ui/form/select";
 
 export function CreateEventForm() {
   const [showUploadSection, setShowUploadSection] =
@@ -87,9 +88,23 @@ export function CreateEventForm() {
         <p className="text-[0.8rem] text-gray-3 mb-2">
           Choose the category for your event
         </p>
-        <select name="" id="">
-          <option value="">Music</option>
-        </select>
+        <Select
+          placeholder="Category"
+          options={[
+            {
+              label: "Music",
+              value: "music",
+            },
+            {
+              label: "Business",
+              value: "business",
+            },
+            {
+              label: "Photograpy",
+              value: "photography",
+            },
+          ]}
+        ></Select>
         <p className="font-bold text-[1.2rem] text-black-3 mt-4">Album</p>
         <p className="text-[0.8rem] text-gray-3 mb-2">
           Upload images for your event
@@ -105,8 +120,6 @@ export function CreateEventForm() {
         </div>
         <hr className="text-gray-5 mt-[1.2rem]" />
       </div>
-
-      {/* Location and time */}
       <div>
         <div className="flex justify-between pt-5 mb-5">
           <div className="flex items-center gap-2">
@@ -127,12 +140,24 @@ export function CreateEventForm() {
           <div className="flex flex-col gap-4">
             <Input label="Zipcode" placeholder="Zipcode" type="text" />
             <Input label="Neighborhood" placeholder="Zipcode" type="text" />
-            <Input label="Number" placeholder="Number" type="text" />
+            <Input label="Complement" placeholder="Complement" type="text" />
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col justify-between gap-4">
             <Input label="Address" placeholder="Address" type="text" />
             <Input label="District" placeholder="District" type="text" />
-            <Input label="Country" placeholder="Country" type="text" />
+            <Select
+              placeholder="Country"
+              options={[
+                {
+                  label: "EUA",
+                  value: "eua",
+                },
+                {
+                  label: "Brazil",
+                  value: "BR",
+                },
+              ]}
+            ></Select>
           </div>
         </div>
         <p className="font-bold text-[1.2rem] text-black-3">Time</p>
@@ -141,18 +166,16 @@ export function CreateEventForm() {
         </p>
         <div className="grid grid-cols-2 gap-8 mb-5">
           <div className="flex flex-col gap-4">
-            <Input label="Time Zone" placeholder="Time Zone" type="text" />
-            <Input label="Start Time" placeholder="Start Time" type="text" />
+            <Input label="Time Zone" placeholder="Time Zone" type="time" />
+            <Input label="Start Time" placeholder="Start Time" type="time" />
           </div>
           <div className="flex flex-col gap-4">
-            <Input label="Event Date" placeholder="Event Date" type="text" />
-            <Input label="End Time" placeholder="District" type="text" />
+            <Input label="Event Date" placeholder="Event Date" type="date" />
+            <Input label="End Time" placeholder="District" type="time" />
           </div>
         </div>
         <hr className="text-gray-5 mt-[1.2rem]" />
       </div>
-
-      {/* Ticket */}
       <div>
         <div className="flex justify-between pt-5 mb-5">
           <div className="flex items-center gap-2">
@@ -165,10 +188,10 @@ export function CreateEventForm() {
         </div>
         <div className="grid grid-cols-2 gap-8 mb-5">
           <div className="flex flex-col gap-4">
-            <Input label="Quantity" placeholder="Quantity" type="text" />
+            <Input label="Quantity" placeholder="0" type="number" />
           </div>
           <div className="flex flex-col gap-4">
-            <Input label="Price" placeholder="Price" type="text" />
+            <Input label="Price $" placeholder="$ xx" type="number" />
           </div>
         </div>
         <p className="font-bold text-[1.2rem] text-black-3 mt-4">Sale date</p>
@@ -177,12 +200,12 @@ export function CreateEventForm() {
         </p>
         <div className="grid grid-cols-2 gap-8 mb-5">
           <div className="flex flex-col gap-4">
-            <Input label="Time Zone" placeholder="Time Zone" type="text" />
-            <Input label="Start Time" placeholder="Start Time" type="text" />
+            <Input label="Time Zone" placeholder="Time Zone" type="time" />
+            <Input label="Start Time" placeholder="Start Time" type="date" />
           </div>
           <div className="flex flex-col gap-4">
-            <Input label="Event Date" placeholder="Event Date" type="text" />
-            <Input label="End Time" placeholder="District" type="text" />
+            <Input label="Event Date" placeholder="Event Date" type="date" />
+            <Input label="End Time" placeholder="District" type="time" />
           </div>
         </div>
         <hr className="text-gray-5 mt-[1.2rem]" />

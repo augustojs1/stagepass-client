@@ -18,7 +18,7 @@ export const Input: React.FC<InputFieldProps> = ({
 }) => {
   const inputId = id || label.toLowerCase().replace(/\s+/g, "-");
 
-  const base = "font-body placeholder-gray-1 text-[14px] px-2 py-1";
+  const base = "font-body placeholder-gray-1 text-[14px] px-2 py-2";
 
   const variants = {
     underlined:
