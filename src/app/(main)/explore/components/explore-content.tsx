@@ -11,7 +11,7 @@ export function ExploreContent() {
   const [showFilter, setShowFilter] = React.useState<boolean>(false);
 
   return (
-    <section className="mb-20">
+    <section className="max-w-[86rem] m-auto mb-20">
       <div className="flex justify-center items-center mb-[2.7rem] gap-4">
         <SearchInput />
         <button
@@ -21,8 +21,8 @@ export function ExploreContent() {
           <ListFilter size={18} color="#636ae8" />
         </button>
       </div>
-      <div className="grid grid-cols-1 md:[grid-template-columns:minmax(0,276px)_minmax(0,856px)] gap-4 justify-center">
-        <aside className="sm:flex hidden">
+      <div className="grid grid-cols-1 md:[grid-template-columns:minmax(0,4fr)_minmax(0,8fr)] lg:gap-20 md:gap-15 gap-4 justify-center">
+        <aside className="sm:block hidden">
           <EventsFilter />
         </aside>
         <div className="flex sm:hidden">
