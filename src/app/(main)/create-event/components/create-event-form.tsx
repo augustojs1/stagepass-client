@@ -8,6 +8,7 @@ import {
   Plus,
   MapPin,
   TicketSlash,
+  Trash2,
 } from "lucide-react";
 
 import { Button } from "@/app/components/ui/form/button";
@@ -27,7 +28,7 @@ export function CreateEventForm() {
   return (
     <form>
       {/* Upload cover */}
-      <div>
+      <div id="upload-section">
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
             <Image size={22} className="text-primary" />
@@ -44,12 +45,14 @@ export function CreateEventForm() {
             <p className="text-[0.8rem] text-gray-3 mb-5">
               Upload the event cover to capture your audience&apos;s attention
             </p>
-            <div className="w-full h-[20rem] rounded-[6px] bg-gray-1"></div>
+            <div className="w-full sm:h-[20rem] h-[12rem] rounded-[6px] bg-gray-1"></div>
             <div className="flex items-center justify-between mt-6">
               <p className="text-[0.8rem] text-gray-3">image-02.png</p>
               <div className="flex gap-3">
-                <Button variant="secondary">Remove</Button>
-                <Button variant="primary">Change</Button>
+                <Button variant="danger" className="gap-1">
+                  <Trash2 size={16} color="#de3b40" /> Remove
+                </Button>
+                <Button variant="secondary">Change</Button>
               </div>
             </div>
           </div>
@@ -58,7 +61,7 @@ export function CreateEventForm() {
       </div>
 
       {/* General information */}
-      <div>
+      <div id="general-section">
         <div className="flex justify-between pt-5 mb-5">
           <div className="flex items-center gap-2">
             <Info size={22} color="#636ae8" />
@@ -120,7 +123,9 @@ export function CreateEventForm() {
         </div>
         <hr className="text-gray-5 mt-[1.2rem]" />
       </div>
-      <div>
+
+      {/* Location and time */}
+      <div id="location-section">
         <div className="flex justify-between pt-5 mb-5">
           <div className="flex items-center gap-2">
             <MapPin size={22} color="#636ae8" />
@@ -176,7 +181,9 @@ export function CreateEventForm() {
         </div>
         <hr className="text-gray-5 mt-[1.2rem]" />
       </div>
-      <div>
+
+      {/* Ticket */}
+      <div id="ticket-section">
         <div className="flex justify-between pt-5 mb-5">
           <div className="flex items-center gap-2">
             <TicketSlash size={22} color="#636ae8" />
@@ -210,7 +217,9 @@ export function CreateEventForm() {
         </div>
         <hr className="text-gray-5 mt-[1.2rem]" />
       </div>
-      <div className="flex justify-between mt-4">
+
+      {/* Publish Event */}
+      <div id="publish-section" className="flex justify-between mt-4">
         <Button variant="secondary">Cancel</Button>
         <Button variant="primary">Publish Event</Button>
       </div>

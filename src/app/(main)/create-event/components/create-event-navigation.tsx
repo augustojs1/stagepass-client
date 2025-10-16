@@ -9,17 +9,37 @@ export function CreateEventNavigation() {
             EVENT INFORMATION
           </p>
           <ul className="flex flex-col">
-            <li className="text-5 font-normal text-gray-2 mb-3">
-              <a href="">Upload cover</a>
+            <li className="text-5 font-normal text-gray-2  mb-3">
+              <a
+                className="transition-colors duration-300 ease-in-out hover:text-primary"
+                href="#upload-section"
+              >
+                Upload cover
+              </a>
             </li>
             <li className="text-5 font-normal text-gray-2 mb-3">
-              <a href="">General Information</a>
+              <a
+                className="transition-colors duration-300 ease-in-out hover:text-primary"
+                href="#general-section"
+              >
+                General Information
+              </a>
             </li>
             <li className="text-5 font-normal text-gray-2 mb-3">
-              <a href="">Location and time</a>
+              <a
+                className="transition-colors duration-300 ease-in-out hover:text-primary"
+                href="#location-section"
+              >
+                Location and time
+              </a>
             </li>
             <li className="text-5 font-normal text-gray-2">
-              <a href="">Ticket</a>
+              <a
+                className="transition-colors duration-300 ease-in-out hover:text-primary"
+                href="#ticket-section"
+              >
+                Ticket
+              </a>
             </li>
           </ul>
           <hr className="text-gray-5 my-4" />
@@ -29,7 +49,12 @@ export function CreateEventNavigation() {
             PUBLISH EVENT
           </p>
           <li className="text-5 font-normal text-gray-2">
-            <a href="">Review and Publish</a>
+            <a
+              className="transition-colors duration-300 ease-in-out hover:text-primary"
+              href="#publish-section"
+            >
+              Review and Publish
+            </a>
           </li>
         </ul>
       </nav>
