@@ -1,14 +1,25 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Input } from "@/app/components";
-import { Button } from "@/app/components/ui/form/button";
+import { Input, Button, ErrorBadge } from "@/app/components";
 import { loginSchema, LoginFormData } from "@/app/(auth)/login/schemas";
+import { loginAction } from "@/app/(auth)/login/actions/";
+import { FetchResponse, LoginResponse } from "@/app/models";
 
 export function LoginForm() {
+  const [loginResponse, setLoginResponse] = React.useState<
+    FetchResponse<LoginResponse>
+  >({
+    success: false,
+    message: null,
+    data: null,
+  });
+  const [showApiError, setShowApiError] = React.useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
@@ -18,10 +29,25 @@ export function LoginForm() {
     mode: "onChange",
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    console.log("Form data:", data);
+  const onSubmit = async (payload: LoginFormData) => {
+    const formData = new FormData();
+    Object.entries(payload).forEach(([k, v]) => formData.append(k, v));
 
-    // await loginAction(data);
+    const response = await loginAction(formData);
+
+    if (!response.success) {
+      setShowApiError(true);
+    }
+
+    setLoginResponse({
+      data: response.data,
+      message: response.message,
+      success: response.success,
+    });
+  };
+
+  const hideApiErrorBadge = () => {
+    setShowApiError(false);
   };
 
   return (
@@ -35,13 +61,13 @@ export function LoginForm() {
         </p>
       </div>
       <form
-        className="max-w-[359px] w-full mx-auto flex flex-col gap-3"
+        className="max-w-[359px] w-full mx-auto flex flex-col gap-2"
         onSubmit={handleSubmit(onSubmit)}
       >
         <Input
           label="Email"
           placeholder="email@email.com"
-          type="text"
+          type="email"
           {...register("email")}
           error={errors.email?.message}
         />
@@ -52,11 +78,22 @@ export function LoginForm() {
           {...register("password")}
           error={errors.password?.message}
         />
-        <Button className="mt-2" variant="primary" block>
+        <Button
+          className="mt-2"
+          variant="primary"
+          block
+          disabled={isSubmitting ? true : false}
+        >
           {isSubmitting ? "Loading..." : "Login"}
         </Button>
+        {showApiError && (
+          <ErrorBadge
+            message={loginResponse.message}
+            showErrorBadge={hideApiErrorBadge}
+          />
+        )}
       </form>
-      <p className="text-center mt-8 text-[14px] font-[400] text-black-3">
+      <p className="text-center mt-3 text-[14px] font-[400] text-black-3">
         Don&apos;t have an account?
         <Link
           href="/sign-up"

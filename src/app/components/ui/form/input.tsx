@@ -39,7 +39,7 @@ export const Input: React.FC<InputFieldProps> = ({
     <div className="flex flex-col w-full">
       <label
         htmlFor={inputId}
-        className={`font-body text-[14px] font-[500] + ${
+        className={`font-body text-[14px] font-[500] ${
           error ? "text-red-2" : "text-black-2"
         }`}
       >
@@ -55,11 +55,7 @@ export const Input: React.FC<InputFieldProps> = ({
         )}
       />
       <div className="h-[14px] mt-1">
-        {error && (
-          <p className="text-red-2 text-[12px] font-body leading-[1.2]">
-            {error}
-          </p>
-        )}
+        {error && <p className="text-red-2 text-[12px] font-body">{error}</p>}
       </div>
     </div>
   );

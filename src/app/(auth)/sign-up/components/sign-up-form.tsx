@@ -16,10 +16,10 @@ export function SignUpForm() {
           Create an account
         </p>
       </div>
-      <form className="max-w-[359px] w-full mx-auto flex flex-col gap-7">
+      <form className="max-w-[359px] w-full mx-auto flex flex-col gap-2">
         <Input label="First Name" placeholder="Joe" type="text" />
         <Input label="Last Name" placeholder="Doe" type="text" />
-        <Input label="Email" placeholder="email@email.com" type="text" />
+        <Input label="Email" placeholder="email@email.com" type="email" />
         <Input label="Password" placeholder="*********" type="password" />
         <Input
           label="Confirm Password"
