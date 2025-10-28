@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { loginSchema } from "@/app/(auth)/login/schemas";
+import { loginSchema, signUpSchema } from "@/app/(auth)/login/schemas";
 import { FetchResponse, LoginResponse } from "@/app/models";
 
 export async function loginAction(
@@ -12,11 +12,14 @@ export async function loginAction(
   loginSchema.safeParse(Object.fromEntries(formData));
 
   try {
-    const res = await fetch("http://localhost:8080/api/v1/auth/local/sign-in", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(Object.fromEntries(formData)),
-    });
+    const res = await fetch(
+      `${process.env.API_URL}/api/v1/auth/local/sign-in`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(formData)),
+      }
+    );
 
     if (!res.ok) {
       const errorBody = await res.json();
@@ -44,4 +47,41 @@ export async function loginAction(
   }
 
   redirect(`/`);
+}
+
+export async function signUpAction(formData: FormData) {
+  // signUpSchema.safeParse(Object.fromEntries(formData));
+
+  console.log(
+    "formData payload::",
+    JSON.stringify(Object.fromEntries(formData))
+  );
+
+  try {
+    const res = await fetch(
+      `${process.env.API_URL}/api/v1/auth/local/sign-up`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(formData)),
+      }
+    );
+
+    const body = await res.json();
+
+    console.log("body::", body);
+
+    if (!res.ok) {
+      const response = {
+        success: false,
+        message: body.message,
+        data: null,
+      };
+
+      return response;
+    }
+  } catch (error) {
+    //
+    console.log("error::", error);
+  }
 }

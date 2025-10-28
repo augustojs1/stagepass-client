@@ -70,6 +70,7 @@ export function LoginForm() {
           type="email"
           {...register("email")}
           error={errors.email?.message}
+          maxLength={50}
         />
         <Input
           label="Password"
@@ -77,6 +78,7 @@ export function LoginForm() {
           type="password"
           {...register("password")}
           error={errors.password?.message}
+          maxLength={50}
         />
         <Button
           className="mt-2"
