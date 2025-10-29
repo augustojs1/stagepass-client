@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { loginSchema, signUpSchema } from "@/app/(auth)/login/schemas";
-import { FetchResponse, LoginResponse } from "@/app/models";
+import { loginSchema } from "@/app/(auth)/login/schemas";
+import { FetchResponse, LoginResponse, SignUpPayload } from "@/app/models";
 
 export async function loginAction(
   formData: FormData
@@ -49,39 +49,45 @@ export async function loginAction(
   redirect(`/`);
 }
 
-export async function signUpAction(formData: FormData) {
-  // signUpSchema.safeParse(Object.fromEntries(formData));
-
-  console.log(
-    "formData payload::",
-    JSON.stringify(Object.fromEntries(formData))
-  );
-
+export async function signUpAction(
+  payload: SignUpPayload
+): Promise<FetchResponse<LoginResponse>> {
   try {
     const res = await fetch(
       `${process.env.API_URL}/api/v1/auth/local/sign-up`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(formData)),
+        body: JSON.stringify(payload),
       }
     );
 
-    const body = await res.json();
-
-    console.log("body::", body);
-
     if (!res.ok) {
+      const errorBody = await res.json();
+
       const response = {
         success: false,
-        message: body.message,
+        message: errorBody.message,
         data: null,
       };
 
       return response;
     }
+
+    const body = (await res.json()) as LoginResponse;
+
+    return {
+      success: true,
+      message: null,
+      data: body,
+    };
   } catch (error) {
-    //
-    console.log("error::", error);
+    console.error("signUpAction error::", error);
+
+    return {
+      success: false,
+      message: "An error has occured while signing you in.",
+      data: null,
+    };
   }
 }

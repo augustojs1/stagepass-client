@@ -4,13 +4,27 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Input } from "@/app/components";
+import { ErrorBadge, Input } from "@/app/components";
 import { Button } from "@/app/components/ui/form/button";
 import { SignInFormData, signUpSchema } from "../../login/schemas";
 import { signUpAction } from "../../login/actions";
-import { SignUpFormData, SignUpPayload } from "@/app/models";
+import {
+  FetchResponse,
+  LoginResponse,
+  SignUpFormData,
+  SignUpPayload,
+} from "@/app/models";
+import React from "react";
 
 export function SignUpForm() {
+  const [signUpResponse, setsignUpResponse] = React.useState<
+    FetchResponse<LoginResponse>
+  >({
+    success: false,
+    message: null,
+    data: null,
+  });
+  const [showApiError, setShowApiError] = React.useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -28,15 +42,21 @@ export function SignUpForm() {
       password: data.password,
     };
 
-    const formData = new FormData();
+    const response = await signUpAction(payload);
 
-    Object.entries(payload).forEach(([k, v]) => {
-      console.log(`${k}: ${v}`);
+    if (!response.success) {
+      setShowApiError(true);
+    }
 
-      formData.append(k, v);
+    setsignUpResponse({
+      data: response.data,
+      message: response.message,
+      success: response.success,
     });
+  };
 
-    const response = await signUpAction(formData);
+  const hideApiErrorBadge = () => {
+    setShowApiError(false);
   };
 
   return (
@@ -101,6 +121,12 @@ export function SignUpForm() {
         >
           {isSubmitting ? "Loading..." : "Sign Up"}
         </Button>
+        {showApiError && (
+          <ErrorBadge
+            message={signUpResponse.message}
+            showErrorBadge={hideApiErrorBadge}
+          />
+        )}
       </form>
       <p className="text-center mt-8 text-[14px] font-[400] text-black-3">
         Already have an account?
