@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { Footer, Header } from "@/app/layouts/components";
+import { Footer, Header } from "@/components/";
 import { font_body, font_display, font_logo } from "../../fonts";
 
 import "../globals.css";

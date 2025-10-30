@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { loginSchema } from "@/app/(auth)/login/schemas";
-import { FetchResponse, LoginResponse, SignUpPayload } from "@/app/models";
+import { loginSchema } from "@/schemas";
+import { FetchResponse, LoginResponse, SignUpPayload } from "@/models";
 
 export async function loginAction(
   formData: FormData

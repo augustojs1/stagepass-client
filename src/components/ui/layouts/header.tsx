@@ -5,8 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu as MenuIcon } from "lucide-react";
 
-import { Menu, Dropdown } from "@/app/components";
-import { Button } from "@/app/components/ui/form/button";
+import { Menu, Dropdown } from "@/components";
+import { Button } from "@/components/ui/form/button";
 
 export function Header() {
   const [isAuth, setIsAuth] = React.useState<boolean>(false);

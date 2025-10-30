@@ -11,9 +11,9 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { Button } from "@/app/components/ui/form/button";
-import { Input, TextArea } from "@/app/components";
-import { Select } from "@/app/components/ui/form/select";
+import { Button } from "@/components/ui/form/button";
+import { Input, TextArea } from "@/components";
+import { Select } from "@/components/ui/form/select";
 
 type Sections = {
   upload: boolean;

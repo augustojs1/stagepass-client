@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/app/components/ui/form/button";
+import { Button } from "@/components/ui/form/button";
 import { Calendar, MapPin } from "lucide-react";
 
 export function EventBanner() {

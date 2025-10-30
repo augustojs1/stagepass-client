@@ -5,10 +5,10 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Input, Button, ErrorBadge } from "@/app/components";
-import { loginSchema, LoginFormData } from "@/app/(auth)/login/schemas";
-import { loginAction } from "@/app/(auth)/login/actions/";
-import { FetchResponse, LoginResponse } from "@/app/models";
+import { Input, Button, ErrorBadge } from "@/components";
+import { loginSchema, LoginFormData } from "@/schemas";
+import { loginAction } from "@/actions";
+import { FetchResponse, LoginResponse } from "@/models";
 
 export function LoginForm() {
   const [loginResponse, setLoginResponse] = React.useState<

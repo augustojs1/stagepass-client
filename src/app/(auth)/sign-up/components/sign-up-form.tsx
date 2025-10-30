@@ -1,20 +1,20 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { ErrorBadge, Input } from "@/app/components";
-import { Button } from "@/app/components/ui/form/button";
-import { SignInFormData, signUpSchema } from "../../login/schemas";
-import { signUpAction } from "../../login/actions";
+import { ErrorBadge, Input } from "@/components";
+import { Button } from "@/components/ui/form/button";
+import { SignInFormData, signUpSchema } from "@/schemas";
+import { signUpAction } from "@/actions";
 import {
   FetchResponse,
   LoginResponse,
   SignUpFormData,
   SignUpPayload,
-} from "@/app/models";
-import React from "react";
+} from "@/models";
 
 export function SignUpForm() {
   const [signUpResponse, setsignUpResponse] = React.useState<

@@ -2,9 +2,9 @@
 
 import React from "react";
 
-import CheckboxGroup from "@/app/components/ui/form/checkbox-group";
-import { Button } from "@/app/components/ui/form/button";
-import { Slider } from "@/app/components";
+import CheckboxGroup from "@/components/ui/form/checkbox-group";
+import { Button } from "@/components/ui/form/button";
+import { Slider } from "@/components";
 
 export function EventsFilter() {
   const [categoriesFilter, setCategoriesFilter] = React.useState<string[]>([

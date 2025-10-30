@@ -1,6 +1,6 @@
-import { SearchInput } from "@/app/components/";
-import { Button } from "../components/ui/form/button";
-import { CategoryCard, EventBanner, EventCard } from "./components";
+import { SearchInput } from "@/components";
+import { Button } from "../../components/ui/form/button";
+import { CategoryCard, EventBanner, EventCard } from "./home/components";
 
 export default function Home() {
   return (

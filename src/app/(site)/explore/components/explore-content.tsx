@@ -4,7 +4,7 @@ import React from "react";
 import { ListFilter } from "lucide-react";
 
 import { EventsFilter } from "./events-filter";
-import { SearchInput } from "@/app/components";
+import { SearchInput } from "@/components";
 import { ExploreEventCard } from "./explore-event-card";
 
 export function ExploreContent() {

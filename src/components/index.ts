@@ -6,3 +6,5 @@ export * from "./ui/form/slider";
 export * from "./ui/form/text-area";
 export * from "./helpers/error-badge";
 export * from "./ui/form/button";
+export * from "./ui/layouts/footer";
+export * from "./ui/layouts/header";
