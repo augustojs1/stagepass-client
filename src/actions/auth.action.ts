@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 import { loginSchema } from "@/schemas";
 import { FetchResponse, LoginResponse, SignUpPayload } from "@/models";
@@ -35,6 +36,23 @@ export async function loginAction(
 
     const body = (await res.json()) as LoginResponse;
 
+    const setCookieHeaders = res.headers.get("set-cookie");
+    if (setCookieHeaders) {
+      const cookieList = setCookieHeaders.split(",");
+
+      cookieList.forEach(async (cookie) => {
+        const [cookiePair] = cookie.split(";");
+        const [name, value] = cookiePair.split("=");
+
+        if (name && value) {
+          cookies().set(name.trim(), value.trim(), {
+            path: "/",
+            httpOnly: true,
+          });
+        }
+      });
+    }
+
     revalidatePath("/");
   } catch (error) {
     console.log("loginAction error::", error);
@@ -58,6 +76,7 @@ export async function signUpAction(
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(payload),
       }
     );

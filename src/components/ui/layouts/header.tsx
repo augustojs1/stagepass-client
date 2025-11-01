@@ -1,15 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu as MenuIcon } from "lucide-react";
 
 import { Menu, Dropdown } from "@/components";
 import { Button } from "@/components/ui/form/button";
+import { UserContext } from "@/context";
 
 export function Header() {
-  const [isAuth, setIsAuth] = React.useState<boolean>(false);
+  const data = useContext(UserContext);
 
   const userMenuItems = [
     { label: "My Profile", href: "/" },
@@ -58,7 +59,7 @@ export function Header() {
           <Menu />
         </div>
         <div>
-          {!isAuth ? (
+          {!data?.user ? (
             <div className="flex justify-end items-center gap-3">
               <Link href="/login">
                 <Button variant="secondary">Log In</Button>
@@ -69,20 +70,14 @@ export function Header() {
             </div>
           ) : (
             <div>
-              <div className="md:flex hidden justify-end gap-2">
-                <div className="size-7 rounded-full bg-gray-2 self-center cursor-pointer"></div>
-                <p className="self-center text-[14px] text-black-3 cursor-pointer">
-                  Augusto Souza
-                </p>
-              </div>
-              <div className="flex md:hidden justify-end items-center">
+              <div className="flex justify-end items-center">
                 <div>
                   <Dropdown
                     trigger={
-                      <div className="flex  items-center gap-2">
+                      <div className="flex items-center gap-2">
                         <div className="size-7 rounded-full bg-gray-2 self-center cursor-pointer"></div>
                         <p className="self-center text-[14px] text-black-3 cursor-pointer">
-                          Augusto Souza
+                          {data.user.first_name}
                         </p>
                       </div>
                     }

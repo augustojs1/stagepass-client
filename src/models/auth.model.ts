@@ -1,15 +1,4 @@
-export interface User {
-  id: string;
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  avatar_url: string | null;
-  is_admin: boolean;
-  phone_number: string | null;
-  updated_at: Date | string;
-  created_at: Date | string;
-}
+import { User } from "./user.model";
 
 export interface Tokens {
   access_token: string;
