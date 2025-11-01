@@ -5,10 +5,12 @@ import { cookies } from "next/headers";
 import { FetchResponse, User } from "@/models";
 
 export async function getMe(): Promise<FetchResponse<User>> {
-  try {
-    const accessTokenCookie = cookies().get("x-access-token");
+  const cookieStore = await cookies();
 
-    if (!accessTokenCookie) {
+  try {
+    const accessToken = cookieStore.get("x-access-token")?.value;
+
+    if (!accessToken) {
       throw new Error("Unauthorized!");
     }
 
@@ -16,12 +18,14 @@ export async function getMe(): Promise<FetchResponse<User>> {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Cookie: `x-access-token=${accessTokenCookie.value}`,
+        Cookie: `x-access-token=${accessToken}`,
       },
       next: {
-        revalidate: 60,
+        revalidate: 0,
       },
     });
+
+    console.log("getMe res::", res);
 
     if (!res.ok) {
       const errorBody = await res.json();

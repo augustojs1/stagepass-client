@@ -12,6 +12,8 @@ export async function loginAction(
 ): Promise<FetchResponse<LoginResponse>> {
   loginSchema.safeParse(Object.fromEntries(formData));
 
+  const cookieStore = await cookies();
+
   try {
     const res = await fetch(
       `${process.env.API_URL}/api/v1/auth/local/sign-in`,
@@ -37,6 +39,7 @@ export async function loginAction(
     const body = (await res.json()) as LoginResponse;
 
     const setCookieHeaders = res.headers.get("set-cookie");
+
     if (setCookieHeaders) {
       const cookieList = setCookieHeaders.split(",");
 
@@ -45,7 +48,7 @@ export async function loginAction(
         const [name, value] = cookiePair.split("=");
 
         if (name && value) {
-          cookies().set(name.trim(), value.trim(), {
+          cookieStore.set(name.trim(), value.trim(), {
             path: "/",
             httpOnly: true,
           });
