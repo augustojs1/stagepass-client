@@ -30,8 +30,6 @@ export async function getMe(): Promise<FetchResponse<User>> {
     if (!res.ok) {
       const errorBody = await res.json();
 
-      console.log("erroBody getMe::", errorBody);
-
       const response = {
         success: false,
         message: errorBody.message,

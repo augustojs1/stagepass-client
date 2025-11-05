@@ -20,6 +20,8 @@ export function UserContextProvider({
 }) {
   const [userState, setUser] = React.useState<User | null>(user);
 
+  React.useEffect(() => {}, []);
+
   return (
     <UserContext.Provider value={{ user: userState, setUser }}>
       {children}
