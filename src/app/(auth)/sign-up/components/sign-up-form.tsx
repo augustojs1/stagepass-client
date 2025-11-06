@@ -9,8 +9,8 @@ import { ErrorBadge, Input } from "@/components";
 import { Button } from "@/components/ui/form/button";
 import { SignInFormData, signUpSchema } from "@/schemas";
 import { signUpAction } from "@/actions";
-import {
-  FetchResponse,
+import type {
+  ApiResponse,
   LoginResponse,
   SignUpFormData,
   SignUpPayload,
@@ -18,7 +18,7 @@ import {
 
 export function SignUpForm() {
   const [signUpResponse, setsignUpResponse] = React.useState<
-    FetchResponse<LoginResponse>
+    ApiResponse<LoginResponse>
   >({
     success: false,
     message: null,
@@ -34,24 +34,24 @@ export function SignUpForm() {
     mode: "onChange",
   });
 
-  const onSubmit = async (data: SignUpFormData) => {
+  const onSubmit = async (formData: SignUpFormData) => {
     const payload: SignUpPayload = {
-      first_name: data.firstName,
-      last_name: data.lastName,
-      email: data.email,
-      password: data.password,
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      email: formData.email,
+      password: formData.password,
     };
 
-    const response = await signUpAction(payload);
+    const { data, message, success } = await signUpAction(payload);
 
-    if (!response.success) {
+    if (!success) {
       setShowApiError(true);
     }
 
     setsignUpResponse({
-      data: response.data,
-      message: response.message,
-      success: response.success,
+      data: data,
+      message: message,
+      success: success,
     });
   };
 

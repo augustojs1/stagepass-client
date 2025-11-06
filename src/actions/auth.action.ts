@@ -7,12 +7,7 @@ import { cookies } from "next/headers";
 import { AuthService } from "@/services";
 import { APIError, isNextRedirectError } from "@/lib";
 import { loginSchema } from "@/schemas";
-import type {
-  ApiResponse,
-  FetchResponse,
-  LoginResponse,
-  SignUpPayload,
-} from "@/models";
+import type { ApiResponse, LoginResponse, SignUpPayload } from "@/models";
 
 export async function loginAction(
   formData: FormData
@@ -63,36 +58,45 @@ export async function loginAction(
 
 export async function signUpAction(
   payload: SignUpPayload
-): Promise<FetchResponse<LoginResponse>> {
+): Promise<ApiResponse<LoginResponse>> {
+  const cookieStore = await cookies();
+
   try {
-    const res = await AuthService.signUp(payload);
+    const { headers } = await AuthService.signUp(payload);
 
-    if (!res.ok) {
-      const errorBody = await res.json();
+    const setCookieHeaders = headers.get("set-cookie")!;
 
-      const response = {
-        success: false,
-        message: errorBody.message,
-        data: null,
-      };
+    const cookieList = setCookieHeaders.split(",");
 
-      return response;
-    }
+    cookieList.forEach(async (cookie) => {
+      const [cookiePair] = cookie.split(";");
+      const [name, value] = cookiePair.split("=");
 
-    const body = (await res.json()) as LoginResponse;
+      if (name && value) {
+        cookieStore.set(name.trim(), value.trim(), {
+          path: "/",
+          httpOnly: true,
+        });
+      }
+    });
 
-    return {
-      success: true,
-      message: null,
-      data: body,
-    };
+    revalidatePath("/");
+    redirect("/");
   } catch (error) {
-    console.error("signUpAction error::", error);
+    if (isNextRedirectError(error)) throw error;
+
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        data: error.body,
+        message: error.message,
+      };
+    }
 
     return {
       success: false,
-      message: "An error has occured while signing you in.",
       data: null,
+      message: "An error has occured!",
     };
   }
 }
@@ -107,35 +111,50 @@ export async function refreshTokenAction() {
       throw new Error("Unauthorized!");
     }
 
-    const res = await AuthService.refreshToken(refreshTokenCookie);
+    const { headers, status } = await AuthService.refreshToken(
+      refreshTokenCookie
+    );
 
-    if (res.ok) {
-      const setCookieHeaders = res.headers.get("set-cookie");
+    const setCookieHeaders = headers.get("set-cookie");
 
-      if (setCookieHeaders) {
-        const cookieList = setCookieHeaders.split(",");
+    if (setCookieHeaders) {
+      const cookieList = setCookieHeaders.split(",");
 
-        cookieList.forEach(async (cookie) => {
-          const [cookiePair] = cookie.split(";");
-          const [name, value] = cookiePair.split("=");
+      cookieList.forEach(async (cookie) => {
+        const [cookiePair] = cookie.split(";");
+        const [name, value] = cookiePair.split("=");
 
-          if (name && value) {
-            cookieStore.set(name.trim(), value.trim(), {
-              path: "/",
-              httpOnly: true,
-            });
-          }
-        });
-      }
-    } else {
-      if (res.status === 401) {
+        if (name && value) {
+          cookieStore.set(name.trim(), value.trim(), {
+            path: "/",
+            httpOnly: true,
+          });
+        }
+      });
+    }
+
+    if (status === 401) {
+      cookieStore.delete("x-access-token");
+      cookieStore.delete("x-refresh-token");
+
+      redirect("/sign-in");
+    }
+  } catch (error) {
+    if (isNextRedirectError(error)) throw error;
+
+    if (error instanceof APIError) {
+      if (error.statusCode === 401) {
         cookieStore.delete("x-access-token");
         cookieStore.delete("x-refresh-token");
 
         redirect("/sign-in");
       }
     }
-  } catch (error) {
-    console.log("refreshToken error::", error);
+
+    return {
+      success: false,
+      data: null,
+      message: "An error has occured!",
+    };
   }
 }

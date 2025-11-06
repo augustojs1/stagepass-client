@@ -1,10 +1,12 @@
 import { apiClient } from "@/lib";
-import { LoginResponse, SignUpPayload } from "@/models";
+import { FetchResponse, LoginResponse, SignUpPayload } from "@/models";
 
 export class AuthService {
   private static readonly BASE_URL = process.env.API_URL;
 
-  static async signIn(formData: FormData) {
+  static async signIn(
+    formData: FormData
+  ): Promise<FetchResponse<LoginResponse>> {
     return apiClient.fetch<LoginResponse>(
       `${this.BASE_URL}/api/v1/auth/local/sign-in`,
       {
@@ -15,19 +17,20 @@ export class AuthService {
     );
   }
 
-  static async signUp(payload: SignUpPayload): Promise<Response> {
-    const res = await fetch(`${this.BASE_URL}/api/v1/auth/local/sign-up`, {
+  static async signUp(
+    payload: SignUpPayload
+  ): Promise<FetchResponse<LoginResponse>> {
+    return apiClient.fetch(`${this.BASE_URL}/api/v1/auth/local/sign-up`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify(payload),
     });
-
-    return res;
   }
 
-  static async refreshToken(refreshToken: string): Promise<Response> {
-    const res = await fetch(`${this.BASE_URL}/api/v1/auth/local/refresh`, {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static async refreshToken(refreshToken: string): Promise<FetchResponse<any>> {
+    return apiClient.fetch(`${this.BASE_URL}/api/v1/auth/local/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +40,5 @@ export class AuthService {
         revalidate: 0,
       },
     });
-
-    return res;
   }
 }
