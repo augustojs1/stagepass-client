@@ -4,7 +4,7 @@ export class APIError extends Error {
   statusCode: number;
 
   constructor(status: number, body: any) {
-    super(body?.message || "Request failed");
+    super(body?.error.message || "Request failed");
     this.statusCode = status;
     this.body = body;
   }
