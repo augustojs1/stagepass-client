@@ -5,63 +5,60 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 import { AuthService } from "@/services";
+import { APIError, isNextRedirectError } from "@/lib";
 import { loginSchema } from "@/schemas";
-import { FetchResponse, LoginResponse, SignUpPayload } from "@/models";
+import type {
+  ApiResponse,
+  FetchResponse,
+  LoginResponse,
+  SignUpPayload,
+} from "@/models";
 
 export async function loginAction(
   formData: FormData
-): Promise<FetchResponse<LoginResponse>> {
+): Promise<ApiResponse<LoginResponse>> {
   loginSchema.safeParse(Object.fromEntries(formData));
 
   const cookieStore = await cookies();
 
   try {
-    const res = await AuthService.signIn(formData);
+    const { headers } = await AuthService.signIn(formData);
 
-    if (!res.ok) {
-      const errorBody = await res.json();
+    const setCookieHeaders = headers.get("set-cookie")!;
 
-      const response = {
-        success: false,
-        message: errorBody.message,
-        data: null,
-      };
+    const cookieList = setCookieHeaders.split(",");
 
-      return response;
-    }
+    cookieList.forEach(async (cookie) => {
+      const [cookiePair] = cookie.split(";");
+      const [name, value] = cookiePair.split("=");
 
-    const body = (await res.json()) as LoginResponse;
-
-    const setCookieHeaders = res.headers.get("set-cookie");
-
-    if (setCookieHeaders) {
-      const cookieList = setCookieHeaders.split(",");
-
-      cookieList.forEach(async (cookie) => {
-        const [cookiePair] = cookie.split(";");
-        const [name, value] = cookiePair.split("=");
-
-        if (name && value) {
-          cookieStore.set(name.trim(), value.trim(), {
-            path: "/",
-            httpOnly: true,
-          });
-        }
-      });
-    }
+      if (name && value) {
+        cookieStore.set(name.trim(), value.trim(), {
+          path: "/",
+          httpOnly: true,
+        });
+      }
+    });
 
     revalidatePath("/");
-  } catch (error) {
-    console.log("loginAction error::", error);
+    redirect("/");
+  } catch (error: unknown) {
+    if (isNextRedirectError(error)) throw error;
+
+    if (error instanceof APIError) {
+      return {
+        success: false,
+        data: error.body,
+        message: error.message,
+      };
+    }
 
     return {
       success: false,
-      message: "An error has occured while signing you in.",
       data: null,
+      message: "An error has occured!",
     };
   }
-
-  redirect(`/`);
 }
 
 export async function signUpAction(
@@ -112,11 +109,6 @@ export async function refreshTokenAction() {
 
     const res = await AuthService.refreshToken(refreshTokenCookie);
 
-    if (res.status === 401) {
-      cookieStore.delete("x-access-token");
-      cookieStore.delete("x-refresh-token");
-    }
-
     if (res.ok) {
       const setCookieHeaders = res.headers.get("set-cookie");
 
@@ -134,6 +126,13 @@ export async function refreshTokenAction() {
             });
           }
         });
+      }
+    } else {
+      if (res.status === 401) {
+        cookieStore.delete("x-access-token");
+        cookieStore.delete("x-refresh-token");
+
+        redirect("/sign-in");
       }
     }
   } catch (error) {

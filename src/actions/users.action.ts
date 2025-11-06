@@ -25,8 +25,6 @@ export async function getMe(): Promise<FetchResponse<User>> {
       },
     });
 
-    console.log("getMe res::", res);
-
     if (!res.ok) {
       const errorBody = await res.json();
 

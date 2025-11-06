@@ -8,11 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input, Button, ErrorBadge } from "@/components";
 import { loginSchema, LoginFormData } from "@/schemas";
 import { loginAction } from "@/actions";
-import { FetchResponse, LoginResponse } from "@/models";
+import { ApiResponse, LoginResponse } from "@/models";
 
 export function LoginForm() {
   const [loginResponse, setLoginResponse] = React.useState<
-    FetchResponse<LoginResponse>
+    ApiResponse<LoginResponse>
   >({
     success: false,
     message: null,

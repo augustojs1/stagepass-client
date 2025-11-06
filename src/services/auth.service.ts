@@ -1,16 +1,18 @@
-import { SignUpPayload } from "@/models";
+import { apiClient } from "@/lib";
+import { LoginResponse, SignUpPayload } from "@/models";
 
 export class AuthService {
   private static readonly BASE_URL = process.env.API_URL;
 
-  static async signIn(formData: FormData): Promise<Response> {
-    const res = await fetch(`${this.BASE_URL}/api/v1/auth/local/sign-in`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(Object.fromEntries(formData)),
-    });
-
-    return res;
+  static async signIn(formData: FormData) {
+    return apiClient.fetch<LoginResponse>(
+      `${this.BASE_URL}/api/v1/auth/local/sign-in`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(formData)),
+      }
+    );
   }
 
   static async signUp(payload: SignUpPayload): Promise<Response> {

@@ -1,27 +1,35 @@
+import { APIError } from "@/lib/api-error";
 import { refreshTokenAction } from "@/actions";
+import { FetchResponse } from "@/models";
 
 export class APIClient {
-  async fetch<T>(url: string, options: RequestInit = {}, retried = false) {
-    const res = await fetch(url, { ...options });
+  async fetch<T>(
+    url: string,
+    options: RequestInit = {},
+    retried = false
+  ): Promise<FetchResponse<T>> {
+    const res = await fetch(url, {
+      ...options,
+      credentials: "include",
+    });
 
-    if (res.status === 401) {
+    if (res.status === 401 && !retried) {
       await refreshTokenAction();
+      return this.fetch<T>(url, options, true);
     }
 
-    // if (res.status === 401 && !retried) {
-    //   const refresh = await fetch("/api/refresh", { credentials: "include" });
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      throw new APIError(res.status, body);
+    }
 
-    //   if (refresh.ok) return this.fetch<T>(url, options, true);
+    const data = await res.json().catch(() => null);
 
-    //   window.location.href = "/login";
-
-    //   throw new Error("Unauthorized");
-    // }
-
-    // if (!res.ok) throw new Error(await res.text());
-    // return res.json() as Promise<T>;
-
-    return res;
+    return {
+      data,
+      headers: res.headers,
+      status: res.status,
+    };
   }
 }
 
