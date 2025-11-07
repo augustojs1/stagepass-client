@@ -2,9 +2,11 @@
 
 import { cookies } from "next/headers";
 
-import { FetchResponse, User } from "@/models";
+import { UsersService } from "@/services";
+import { APIError } from "@/lib";
+import type { ApiResponse, User } from "@/models";
 
-export async function getMe(): Promise<FetchResponse<User>> {
+export async function getMe(): Promise<ApiResponse<User>> {
   const cookieStore = await cookies();
 
   try {
@@ -14,43 +16,27 @@ export async function getMe(): Promise<FetchResponse<User>> {
       throw new Error("Unauthorized!");
     }
 
-    const res = await fetch(`${process.env.API_URL}/api/v1/users/me`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `x-access-token=${accessToken}`,
-      },
-      next: {
-        revalidate: 0,
-      },
-    });
-
-    if (!res.ok) {
-      const errorBody = await res.json();
-
-      const response = {
-        success: false,
-        message: errorBody.message,
-        data: null,
-      };
-
-      return response;
-    }
-
-    const body = (await res.json()) as User;
+    const { data } = await UsersService.getMe(accessToken);
 
     return {
       success: true,
-      message: "Successfully signed in!",
-      data: body,
+      message: "Successfully get user!",
+      data: data,
     };
   } catch (error: unknown) {
-    console.log("getMe instanceof::", error);
+    if (error instanceof APIError) {
+      return {
+        success: false,
 
-    if (error instanceof Error) {
-      return { data: null, success: false, message: error.message };
-    } else {
-      return { data: null, success: false, message: "Erro genérico" };
+        data: error.body,
+        message: error.message,
+      };
     }
+
+    return {
+      success: false,
+      data: null,
+      message: "An error has occured!",
+    };
   }
 }

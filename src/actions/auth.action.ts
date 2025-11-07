@@ -137,7 +137,7 @@ export async function refreshTokenAction() {
       cookieStore.delete("x-access-token");
       cookieStore.delete("x-refresh-token");
 
-      redirect("/sign-in");
+      redirect("/login");
     }
   } catch (error) {
     if (isNextRedirectError(error)) throw error;
@@ -147,7 +147,7 @@ export async function refreshTokenAction() {
         cookieStore.delete("x-access-token");
         cookieStore.delete("x-refresh-token");
 
-        redirect("/sign-in");
+        redirect("/login");
       }
     }
 
