@@ -16,7 +16,7 @@ export async function getMe(): Promise<ApiResponse<User>> {
       throw new Error("Unauthorized!");
     }
 
-    const { data } = await UsersService.getMe(accessToken);
+    const { data } = await UsersService.getMe();
 
     return {
       success: true,
@@ -27,7 +27,6 @@ export async function getMe(): Promise<ApiResponse<User>> {
     if (error instanceof APIError) {
       return {
         success: false,
-
         data: error.body,
         message: error.message,
       };

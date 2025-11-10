@@ -2,7 +2,7 @@ import { apiClient } from "@/lib";
 import { FetchResponse, LoginResponse, SignUpPayload } from "@/models";
 
 export class AuthService {
-  private static readonly BASE_URL = process.env.API_URL;
+  private static readonly BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   static async signIn(
     formData: FormData

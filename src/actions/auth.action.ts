@@ -101,7 +101,8 @@ export async function signUpAction(
   }
 }
 
-export async function refreshTokenAction() {
+export async function refreshToken() {
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   const cookieStore = await cookies();
 
   try {
@@ -111,11 +112,17 @@ export async function refreshTokenAction() {
       throw new Error("Unauthorized!");
     }
 
-    const { headers, status } = await AuthService.refreshToken(
-      refreshTokenCookie
-    );
+    const res = await fetch(`${BASE_URL}/api/v1/auth/local/refresh`, {
+      method: "POST",
+      credentials: "include",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `x-refresh-token=${refreshTokenCookie}`,
+      },
+    });
 
-    const setCookieHeaders = headers.get("set-cookie");
+    const setCookieHeaders = res.headers.get("set-cookie");
 
     if (setCookieHeaders) {
       const cookieList = setCookieHeaders.split(",");
@@ -133,12 +140,16 @@ export async function refreshTokenAction() {
       });
     }
 
-    if (status === 401) {
+    if (res.status === 401) {
       cookieStore.delete("x-access-token");
       cookieStore.delete("x-refresh-token");
 
       redirect("/login");
     }
+
+    return {
+      ok: true,
+    };
   } catch (error) {
     if (isNextRedirectError(error)) throw error;
 
@@ -150,11 +161,5 @@ export async function refreshTokenAction() {
         redirect("/login");
       }
     }
-
-    return {
-      success: false,
-      data: null,
-      message: "An error has occured!",
-    };
   }
 }

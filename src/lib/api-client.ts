@@ -1,21 +1,30 @@
 import { APIError } from "@/lib/api-error";
-import { refreshTokenAction } from "@/actions";
 import { FetchResponse } from "@/models";
 
 export class APIClient {
   async fetch<T>(
     url: string,
     options: RequestInit = {},
-    retried = false
+    retry = true
   ): Promise<FetchResponse<T>> {
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
     const res = await fetch(url, {
       ...options,
       credentials: "include",
     });
 
-    if (res.status === 401 && !retried) {
-      await refreshTokenAction();
-      return this.fetch<T>(url, options, true);
+    if (res.status === 401 && retry) {
+      const res = await fetch(`${BASE_URL}/api/refresh`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        return await this.fetch<T>(url, options, false);
+      }
+
+      return Promise.reject("Unauthorized");
     }
 
     if (!res.ok) {
@@ -23,10 +32,8 @@ export class APIClient {
       throw new APIError(res.status, body);
     }
 
-    const data = await res.json().catch(() => null);
-
     return {
-      data,
+      data: await res.json().catch(() => null),
       headers: res.headers,
       status: res.status,
     };
