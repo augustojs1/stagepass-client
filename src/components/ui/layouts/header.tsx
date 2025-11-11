@@ -3,7 +3,7 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu as MenuIcon } from "lucide-react";
+import { Menu as MenuIcon, User } from "lucide-react";
 
 import { Menu, Dropdown } from "@/components";
 import { Button } from "@/components/ui/form/button";
@@ -58,7 +58,7 @@ export function Header() {
         <div className="md:flex hidden">
           <Menu />
         </div>
-        <div>
+        <div className="flex justify-end items-center">
           {!data?.user ? (
             <div className="flex justify-end items-center gap-3">
               <Link href="/login">
@@ -75,7 +75,18 @@ export function Header() {
                   <Dropdown
                     trigger={
                       <div className="flex items-center gap-2">
-                        <div className="size-7 rounded-full bg-gray-2 self-center cursor-pointer"></div>
+                        <div className="flex items-center justify-center size-8 rounded-full bg-gray-5 self-center cursor-pointer">
+                          {data.user.avatar_url ? (
+                            <Image
+                              src={data.user.avatar_url}
+                              width={22}
+                              height={22}
+                              alt={data.user.first_name}
+                            />
+                          ) : (
+                            <User size={22} color="#171a3b" />
+                          )}
+                        </div>
                         <p className="self-center text-[14px] text-black-3 cursor-pointer">
                           {data.user.first_name}
                         </p>
