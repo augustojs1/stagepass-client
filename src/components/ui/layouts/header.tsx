@@ -7,15 +7,25 @@ import { Menu as MenuIcon, User } from "lucide-react";
 
 import { Menu, Dropdown } from "@/components";
 import { Button } from "@/components/ui/form/button";
+import { logout } from "@/actions";
 import { UserContext } from "@/context";
+import type { IUserContext } from "@/context/user-context";
 
 export function Header() {
-  const data = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext) as IUserContext;
+
+  const handleLogout = async () => {
+    const response = await logout();
+
+    if (response.success) {
+      setUser(null);
+    }
+  };
 
   const userMenuItems = [
     { label: "My Profile", href: "/" },
     { label: "My Events", href: "/" },
-    { label: "Logout", onClick: () => console.log("Logout") },
+    { label: "Logout", onClick: handleLogout },
   ];
 
   const navMenuItems = [
@@ -59,7 +69,7 @@ export function Header() {
           <Menu />
         </div>
         <div className="flex justify-end items-center">
-          {!data?.user ? (
+          {!user ? (
             <div className="flex justify-end items-center gap-3">
               <Link href="/login">
                 <Button variant="secondary">Log In</Button>
@@ -76,19 +86,19 @@ export function Header() {
                     trigger={
                       <div className="flex items-center gap-2">
                         <div className="flex items-center justify-center size-8 rounded-full bg-gray-5 self-center cursor-pointer">
-                          {data.user.avatar_url ? (
+                          {user.avatar_url ? (
                             <Image
-                              src={data.user.avatar_url}
+                              src={user.avatar_url}
                               width={22}
                               height={22}
-                              alt={data.user.first_name}
+                              alt={user.first_name}
                             />
                           ) : (
                             <User size={22} color="#171a3b" />
                           )}
                         </div>
                         <p className="self-center text-[14px] text-black-3 cursor-pointer">
-                          {data.user.first_name}
+                          {user.first_name}
                         </p>
                       </div>
                     }

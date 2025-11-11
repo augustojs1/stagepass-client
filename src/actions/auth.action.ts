@@ -163,3 +163,33 @@ export async function refreshToken() {
     }
   }
 }
+
+export async function logout(): Promise<ApiResponse> {
+  const cookieStore = await cookies();
+
+  try {
+    const accessToken = cookieStore.get("x-access-token")?.value;
+
+    if (!accessToken) {
+      throw new Error("Unauthorized!");
+    }
+
+    await AuthService.logout(accessToken);
+
+    cookieStore.delete("x-access-token");
+    cookieStore.delete("x-refresh-token");
+
+    return {
+      success: true,
+      message: "Successfully logout!",
+      data: null,
+    };
+  } catch (error) {
+    console.log("logout error::", error);
+    return {
+      success: false,
+      message: "Failed logout!",
+      data: null,
+    };
+  }
+}

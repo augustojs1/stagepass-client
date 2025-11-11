@@ -5,7 +5,7 @@ import React from "react";
 import { User } from "@/models";
 import { UsersService } from "@/services";
 
-type IUserContext = {
+export type IUserContext = {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   loading: boolean;

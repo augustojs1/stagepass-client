@@ -4,7 +4,7 @@ export interface FetchResponse<T> {
   status: number;
 }
 
-export interface ApiResponse<T> {
+export interface ApiResponse<T = void> {
   message: string | null;
   success: boolean;
   data: T | null;

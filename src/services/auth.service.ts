@@ -41,4 +41,20 @@ export class AuthService {
       },
     });
   }
+
+  static async logout(access_token: string) {
+    console.log("logout accessToken::", access_token);
+
+    return apiClient.fetch(`${this.BASE_URL}/api/v1/auth/local/sign-out`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `x-access-token=${access_token}`,
+      },
+      credentials: "include",
+      next: {
+        revalidate: 0,
+      },
+    });
+  }
 }
