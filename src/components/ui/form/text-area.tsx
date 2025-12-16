@@ -2,10 +2,12 @@
 
 import React from "react";
 
-export function TextArea({
-  id,
-  ...props
-}: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+interface TextAreaFieldProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: string;
+}
+
+export const TextArea: React.FC<TextAreaFieldProps> = ({ id, ...props }) => {
   const inputId = id;
 
   return (
@@ -15,4 +17,4 @@ export function TextArea({
       {...props}
     ></textarea>
   );
-}
+};

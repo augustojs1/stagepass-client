@@ -1,6 +1,7 @@
 "use client";
 
 import React, { FormEvent } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
   ChevronDown,
   Image,
@@ -10,10 +11,13 @@ import {
   TicketSlash,
   Trash2,
 } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/form/button";
 import { Input, TextArea } from "@/components";
 import { Select } from "@/components/ui/form/select";
+import { CreateEventFormData, createEventFormData } from "@/models";
+import { countries } from "@/data";
 
 type Sections = {
   upload: boolean;
@@ -42,8 +46,22 @@ export function CreateEventForm() {
     }));
   };
 
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<CreateEventFormData>({
+    resolver: zodResolver(createEventFormData),
+    mode: "onChange",
+  });
+
+  const onSubmit = async (payload: CreateEventFormData) => {
+    const formData = new FormData();
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       {/* Upload cover */}
       <div id="upload-section">
         <div className="flex justify-between">
@@ -117,35 +135,58 @@ export function CreateEventForm() {
           <p className="text-[0.8rem] text-gray-3 mb-2">
             Make it catchy and memorable
           </p>
-          <Input label="" placeholder="Joe" type="text" />
+          <Input
+            label=""
+            placeholder="Your event name"
+            type="text"
+            {...register("name")}
+            error={errors.name?.message}
+            maxLength={30}
+          />
           <p className="font-bold text-[1.2rem] text-black-3 mt-4">
             Description <span className="text-red-3">*</span>
           </p>
           <p className="text-[0.8rem] text-gray-3 mb-2">
             Provide essential event details
           </p>
-          <TextArea rows={4} placeholder="Your event description" />
+          <TextArea
+            rows={4}
+            placeholder="Your event description"
+            {...register("description")}
+            error={errors.description?.message}
+            maxLength={200}
+          />
           <p className="font-bold text-[1.2rem] text-black-3 mt-4">Category</p>
           <p className="text-[0.8rem] text-gray-3 mb-2">
             Choose the category for your event
           </p>
-          <Select
-            placeholder="Category"
-            options={[
-              {
-                label: "Music",
-                value: "music",
-              },
-              {
-                label: "Business",
-                value: "business",
-              },
-              {
-                label: "Photograpy",
-                value: "photography",
-              },
-            ]}
-          ></Select>
+          <Controller
+            name="country"
+            control={control}
+            render={({ field }) => (
+              <Select
+                label="Category"
+                placeholder="Category"
+                options={[
+                  {
+                    label: "Music",
+                    value: "music",
+                  },
+                  {
+                    label: "Business",
+                    value: "business",
+                  },
+                  {
+                    label: "Photograpy",
+                    value: "photography",
+                  },
+                ]}
+                value={field.value}
+                onChange={field.onChange}
+                error={errors.category?.message}
+              ></Select>
+            )}
+          />
           <p className="font-bold text-[1.2rem] text-black-3 mt-4">Album</p>
           <p className="text-[0.8rem] text-gray-3 mb-2">
             Upload images for your event
@@ -197,26 +238,62 @@ export function CreateEventForm() {
           </p>
           <div className="grid grid-cols-2 gap-8 mb-5">
             <div className="flex flex-col gap-4">
-              <Input label="Zipcode" placeholder="Zipcode" type="text" />
-              <Input label="Neighborhood" placeholder="Zipcode" type="text" />
-              <Input label="Complement" placeholder="Complement" type="text" />
+              <Input
+                label="Zipcode"
+                placeholder="Zipcode"
+                type="text"
+                {...register("zipcode")}
+                error={errors.zipcode?.message}
+                maxLength={10}
+              />
+              <Input
+                label="Neighborhood"
+                placeholder="Neighborhood"
+                type="text"
+                {...register("neighborhood")}
+                error={errors.neighborhood?.message}
+                maxLength={30}
+              />
+              <Input
+                label="Complement"
+                placeholder="Complement"
+                type="text"
+                {...register("number")}
+                error={errors.number?.message}
+                maxLength={20}
+              />
             </div>
             <div className="flex flex-col justify-between gap-4">
-              <Input label="Address" placeholder="Address" type="text" />
-              <Input label="District" placeholder="District" type="text" />
-              <Select
-                placeholder="Country"
-                options={[
-                  {
-                    label: "EUA",
-                    value: "eua",
-                  },
-                  {
-                    label: "Brazil",
-                    value: "BR",
-                  },
-                ]}
-              ></Select>
+              <Input
+                label="Address"
+                placeholder="Address"
+                type="text"
+                {...register("address")}
+                error={errors.address?.message}
+                maxLength={30}
+              />
+              <Input
+                label="District"
+                placeholder="District"
+                type="text"
+                {...register("district")}
+                error={errors.district?.message}
+                maxLength={30}
+              />
+              <Controller
+                name="country"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    label="Country"
+                    placeholder="Country"
+                    options={countries}
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.country?.message}
+                  />
+                )}
+              />
             </div>
           </div>
           <p className="font-bold text-[1.2rem] text-black-3">Time</p>
@@ -225,12 +302,33 @@ export function CreateEventForm() {
           </p>
           <div className="grid grid-cols-2 gap-8 mb-5">
             <div className="flex flex-col gap-4">
-              <Input label="Time Zone" placeholder="Time Zone" type="time" />
-              <Input label="Start Time" placeholder="Start Time" type="time" />
+              <Input
+                label="Start Date"
+                type="date"
+                {...register("startDate")}
+                error={errors.startDate?.message}
+              />
+              <Input
+                label="End Date"
+                type="date"
+                {...register("endDate")}
+                error={errors.endDate?.message}
+              />
             </div>
             <div className="flex flex-col gap-4">
-              <Input label="Event Date" placeholder="Event Date" type="date" />
-              <Input label="End Time" placeholder="District" type="time" />
+              <Input
+                label="Start Time"
+                type="time"
+                {...register("startHour")}
+                error={errors.startHour?.message}
+              />
+              <Input
+                label="End Time"
+                placeholder="District"
+                type="time"
+                {...register("endHour")}
+                error={errors.endHour?.message}
+              />
             </div>
           </div>
         </div>
@@ -265,20 +363,6 @@ export function CreateEventForm() {
             </div>
             <div className="flex flex-col gap-4">
               <Input label="Price $" placeholder="$ xx" type="number" />
-            </div>
-          </div>
-          <p className="font-bold text-[1.2rem] text-black-3 mt-4">Sale date</p>
-          <p className="text-[0.8rem] text-gray-3 mb-2">
-            Set the sale time when your audience is able to purchase the tickets
-          </p>
-          <div className="grid grid-cols-2 gap-8 mb-5">
-            <div className="flex flex-col gap-4">
-              <Input label="Time Zone" placeholder="Time Zone" type="time" />
-              <Input label="Start Time" placeholder="Start Time" type="date" />
-            </div>
-            <div className="flex flex-col gap-4">
-              <Input label="Event Date" placeholder="Event Date" type="date" />
-              <Input label="End Time" placeholder="District" type="time" />
             </div>
           </div>
         </div>
