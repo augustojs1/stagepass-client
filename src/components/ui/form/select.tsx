@@ -21,7 +21,7 @@ interface SelectProps {
 
 export function Select({
   label,
-  placeholder = "Select a value",
+  placeholder,
   options,
   value,
   onChange,
@@ -51,7 +51,7 @@ export function Select({
     "w-full font-body text-[14px] px-2 py-2 rounded-[8px] flex justify-between items-center transition-colors duration-150 ease-in-out focus:outline-none focus:ring-1";
 
   const variants = {
-    default: "bg-gray-1 text-gray-2 focus:ring-primary",
+    default: "bg-white-3 text-gray-2 focus:ring-primary",
   };
 
   const errorVariant =
