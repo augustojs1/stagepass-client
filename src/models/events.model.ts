@@ -14,7 +14,7 @@ export const createEventFormData = z
     description: z
       .string()
       .min(2, "Event description must have at least 6 characters."),
-    category: z.string(),
+    category: z.string().min(1, "Category is required."),
     zipcode: z.string().min(5, "Zipcode must have at least 5 characters."),
     address: z
       .string()
@@ -25,14 +25,14 @@ export const createEventFormData = z
     district: z
       .string()
       .min(5, "District password must have at least 5 characters."),
-    country: z.string(),
+    country: z.string().min(1, "Country is required."),
     number: z
       .string()
       .min(2, "Event complement must have at least 2 characters."),
-    startDate: z.string(),
-    startHour: z.string(),
-    endDate: z.string(),
-    endHour: z.string(),
+    startDate: z.string().min(1, "Start date is required."),
+    startHour: z.string().min(1, "Start hour is required."),
+    endDate: z.string().min(1, "End date is required."),
+    endHour: z.string().min(1, "End hour is required."),
     tickets: z.array(ticketSchema).min(1, "At least one ticket is required"),
   })
   .required();

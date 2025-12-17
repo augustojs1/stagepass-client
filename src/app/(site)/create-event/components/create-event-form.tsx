@@ -52,10 +52,12 @@ export function CreateEventForm() {
     resolver: zodResolver(createEventFormData),
     mode: "onChange",
     defaultValues: {
+      category: "",
+      country: "",
       tickets: [
         {
           name: "",
-          quantity: 1,
+          quantity: 0,
           price: 0,
         },
       ],
@@ -99,12 +101,17 @@ export function CreateEventForm() {
             </h3>
           </div>
           <button
-            className="cursor-pointer p-2"
+            className="cursor-pointer p-2 transition-all duration-300 ease-in-out"
             onClick={() => {
               handleShowSection("upload");
             }}
           >
-            <ChevronDown size={22} className="text-gray-3" />
+            <ChevronDown
+              size={22}
+              className={`text-gray-3 transition-transform ${
+                showSection.upload ? "rotate-180" : ""
+              } `}
+            />
           </button>
         </div>
         <div
@@ -140,12 +147,17 @@ export function CreateEventForm() {
             </h3>
           </div>
           <button
-            className="cursor-pointer p-2"
+            className="cursor-pointer p-2 transition-all duration-300 ease-in-out"
             onClick={() => {
               handleShowSection("generalInformation");
             }}
           >
-            <ChevronDown size={22} color="#6e7787" />
+            <ChevronDown
+              size={22}
+              className={`text-gray-3 transition-transform ${
+                showSection.generalInformation ? "rotate-180" : ""
+              } `}
+            />
           </button>
         </div>
         <div
@@ -189,12 +201,12 @@ export function CreateEventForm() {
             Choose the category for your event
           </p>
           <Controller
-            name="country"
+            name="category"
             control={control}
             render={({ field }) => (
               <Select
                 label="Category"
-                placeholder="Category"
+                placeholder="Select a category"
                 options={[
                   {
                     label: "Music",
@@ -242,12 +254,17 @@ export function CreateEventForm() {
             </h3>
           </div>
           <button
-            className="cursor-pointer p-2"
+            className="cursor-pointer p-2 transition-all duration-300 ease-in-out"
             onClick={() => {
               handleShowSection("locationAndTime");
             }}
           >
-            <ChevronDown size={22} color="#6e7787" />
+            <ChevronDown
+              size={22}
+              className={`text-gray-3 transition-transform ${
+                showSection.locationAndTime ? "rotate-180" : ""
+              } `}
+            />
           </button>
         </div>
         <div
@@ -265,7 +282,7 @@ export function CreateEventForm() {
             Fill your event address information
           </p>
           <div className="grid grid-cols-2 gap-8 mb-5">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-7 md:gap-4">
               <Input
                 label="Zipcode"
                 placeholder="Zipcode"
@@ -291,7 +308,7 @@ export function CreateEventForm() {
                 maxLength={20}
               />
             </div>
-            <div className="flex flex-col justify-between gap-4">
+            <div className="flex flex-col justify-between gap-7 md:gap-4">
               <Input
                 label="Address"
                 placeholder="Address"
@@ -314,7 +331,7 @@ export function CreateEventForm() {
                 render={({ field }) => (
                   <Select
                     label="Country"
-                    placeholder="Country"
+                    placeholder="Select a country"
                     options={countries}
                     value={field.value}
                     onChange={field.onChange}
@@ -329,7 +346,7 @@ export function CreateEventForm() {
             Choose the start time and end time for your event
           </p>
           <div className="grid grid-cols-2 gap-8 mb-5">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-7 md:gap-4">
               <Input
                 label="Start Date"
                 type="date"
@@ -343,7 +360,7 @@ export function CreateEventForm() {
                 error={errors.endDate?.message}
               />
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-7 md:gap-4">
               <Input
                 label="Start Time"
                 type="time"
@@ -371,76 +388,83 @@ export function CreateEventForm() {
             <h3 className="font-bold text-[1.5rem] text-black-3">Tickets</h3>
           </div>
           <button
-            className="cursor-pointer p-2"
+            className="cursor-pointer p-2 transition-all duration-300 ease-in-out"
             onClick={() => {
               handleShowSection("ticket");
             }}
           >
-            <ChevronDown size={22} color="#6e7787" />
+            <ChevronDown
+              size={22}
+              className={`text-gray-3 transition-transform ${
+                showSection.ticket ? "rotate-180" : ""
+              } `}
+            />
           </button>
         </div>
-        {fields.map((field, index) => (
-          <div
-            key={field.id}
-            className={`
+
+        <div
+          className={`
       transition-all duration-300 ease-in-out overflow-hidden mb-5 px-2 
       ${showSection.ticket ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}
       `}
-          >
-            <p className="font-bold text-[1.2rem] text-black-3 mt-5">
-              Ticket #{index + 1}
-            </p>
-            <div className="flex flex-col xl:flex-row items-center xl:gap-5 gap-2 mt-2">
-              <Input
-                label="Name"
-                placeholder={`Batch #${index + 1}`}
-                type="text"
-                {...register(`tickets.${index}.name`)}
-                error={errors.tickets?.[index]?.name?.message}
-              />
-              <Input
-                label="Quantity"
-                placeholder="0"
-                type="number"
-                {...register(`tickets.${index}.quantity`, {
-                  valueAsNumber: true,
-                })}
-                error={errors.tickets?.[index]?.quantity?.message}
-              />
-              <Input
-                label="Price $"
-                placeholder="$ 0.00"
-                type="number"
-                {...register(`tickets.${index}.price`, {
-                  valueAsNumber: true,
-                })}
-                error={errors.tickets?.[index]?.price?.message}
-              />
-              <div className="flex justify-center">
-                {index >= 1 ? (
-                  <Button
-                    variant="danger"
-                    className="gap-1"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      remove(index);
-                    }}
-                  >
-                    <Trash2 size={16} color="#de3b40" /> Remove
-                  </Button>
-                ) : (
-                  <Button variant="danger" className="invisible gap-1">
-                    <Trash2 size={16} color="#de3b40" /> Remove
-                  </Button>
-                )}
+        >
+          {fields.map((field, index) => (
+            <div key={field.id}>
+              <p className="font-bold text-[1.2rem] text-black-3 mt-5">
+                Ticket #{index + 1}
+              </p>
+              <div className="flex flex-col xl:flex-row items-center xl:gap-5 gap-2 mt-2">
+                <Input
+                  label="Name"
+                  placeholder={`Batch #${index + 1}`}
+                  type="text"
+                  {...register(`tickets.${index}.name`)}
+                  error={errors.tickets?.[index]?.name?.message}
+                />
+                <Input
+                  label="Quantity"
+                  placeholder="0"
+                  type="number"
+                  {...register(`tickets.${index}.quantity`, {
+                    valueAsNumber: true,
+                  })}
+                  error={errors.tickets?.[index]?.quantity?.message}
+                />
+                <Input
+                  label="Price $"
+                  placeholder="$ 0.00"
+                  type="number"
+                  {...register(`tickets.${index}.price`, {
+                    valueAsNumber: true,
+                  })}
+                  error={errors.tickets?.[index]?.price?.message}
+                />
+                <div className="flex justify-center">
+                  {index >= 1 ? (
+                    <Button
+                      variant="danger"
+                      className="gap-1"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        remove(index);
+                      }}
+                    >
+                      <Trash2 size={16} color="#de3b40" /> Remove
+                    </Button>
+                  ) : (
+                    <Button variant="danger" className="invisible gap-1">
+                      <Trash2 size={16} color="#de3b40" /> Remove
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
+          ))}
+          <div className="flex justify-center mt-8 md:mt-0">
+            <Button variant="secondary" onClick={handleAddTicket}>
+              + Add ticket
+            </Button>
           </div>
-        ))}
-        <div className="flex justify-center mt-8 md:mt-0">
-          <Button variant="secondary" onClick={handleAddTicket}>
-            + Add ticket
-          </Button>
         </div>
         <hr className="text-gray-5 mt-[1.2rem]" />
       </div>
