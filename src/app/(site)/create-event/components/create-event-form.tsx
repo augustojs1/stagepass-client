@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FormEvent } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import {
   ChevronDown,
   Image,
@@ -27,9 +27,6 @@ type Sections = {
 };
 
 export function CreateEventForm() {
-  const [showUploadSection, setShowUploadSection] =
-    React.useState<boolean>(true);
-
   const [showSection, setShowCategory] = React.useState<Sections>({
     generalInformation: true,
     locationAndTime: true,
@@ -54,11 +51,41 @@ export function CreateEventForm() {
   } = useForm<CreateEventFormData>({
     resolver: zodResolver(createEventFormData),
     mode: "onChange",
+    defaultValues: {
+      tickets: [
+        {
+          name: "",
+          quantity: 1,
+          price: 0,
+        },
+      ],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "tickets",
   });
 
   const onSubmit = async (payload: CreateEventFormData) => {
     const formData = new FormData();
   };
+
+  function handleAddTicket(event: MouseEvent): void {
+    event.preventDefault();
+
+    append({
+      name: "",
+      quantity: 1,
+      price: 0,
+    });
+  }
+
+  function handleRemoveTicket(event: MouseEvent): void {
+    event.preventDefault();
+
+    remove();
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -150,6 +177,7 @@ export function CreateEventForm() {
             Provide essential event details
           </p>
           <TextArea
+            label=""
             rows={4}
             placeholder="Your event description"
             {...register("description")}
@@ -340,7 +368,7 @@ export function CreateEventForm() {
         <div className="flex justify-between pt-5">
           <div className="flex items-center gap-2">
             <TicketSlash size={22} color="#636ae8" />
-            <h3 className="font-bold text-[1.5rem] text-black-3">Ticket</h3>
+            <h3 className="font-bold text-[1.5rem] text-black-3">Tickets</h3>
           </div>
           <button
             className="cursor-pointer p-2"
@@ -351,20 +379,68 @@ export function CreateEventForm() {
             <ChevronDown size={22} color="#6e7787" />
           </button>
         </div>
-        <div
-          className={`
-      transition-all duration-300 ease-in-out overflow-hidden mb-5 px-2
+        {fields.map((field, index) => (
+          <div
+            key={field.id}
+            className={`
+      transition-all duration-300 ease-in-out overflow-hidden mb-5 px-2 
       ${showSection.ticket ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}
       `}
-        >
-          <div className="grid grid-cols-2 gap-8 mt-5">
-            <div className="flex flex-col gap-4">
-              <Input label="Quantity" placeholder="0" type="number" />
-            </div>
-            <div className="flex flex-col gap-4">
-              <Input label="Price $" placeholder="$ xx" type="number" />
+          >
+            <p className="font-bold text-[1.2rem] text-black-3 mt-5">
+              Ticket #{index + 1}
+            </p>
+            <div className="flex flex-col xl:flex-row items-center xl:gap-5 gap-2 mt-2">
+              <Input
+                label="Name"
+                placeholder={`Batch #${index + 1}`}
+                type="text"
+                {...register(`tickets.${index}.name`)}
+                error={errors.tickets?.[index]?.name?.message}
+              />
+              <Input
+                label="Quantity"
+                placeholder="0"
+                type="number"
+                {...register(`tickets.${index}.quantity`, {
+                  valueAsNumber: true,
+                })}
+                error={errors.tickets?.[index]?.quantity?.message}
+              />
+              <Input
+                label="Price $"
+                placeholder="$ 0.00"
+                type="number"
+                {...register(`tickets.${index}.price`, {
+                  valueAsNumber: true,
+                })}
+                error={errors.tickets?.[index]?.price?.message}
+              />
+              <div className="flex justify-center">
+                {index >= 1 ? (
+                  <Button
+                    variant="danger"
+                    className="gap-1"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      remove(index);
+                    }}
+                  >
+                    <Trash2 size={16} color="#de3b40" /> Remove
+                  </Button>
+                ) : (
+                  <Button variant="danger" className="invisible gap-1">
+                    <Trash2 size={16} color="#de3b40" /> Remove
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
+        ))}
+        <div className="flex justify-center mt-8 md:mt-0">
+          <Button variant="secondary" onClick={handleAddTicket}>
+            + Add ticket
+          </Button>
         </div>
         <hr className="text-gray-5 mt-[1.2rem]" />
       </div>

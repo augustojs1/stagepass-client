@@ -69,7 +69,6 @@ export function Select({
           {label}
         </label>
       )}
-
       <button
         type="button"
         aria-haspopup="listbox"
@@ -85,7 +84,6 @@ export function Select({
           className={cn("w-5 h-5 transition-transform", isOpen && "rotate-180")}
         />
       </button>
-
       {isOpen && (
         <ul
           role="listbox"
@@ -102,7 +100,7 @@ export function Select({
               }}
               className={cn(
                 "px-4 py-2 text-[14px] cursor-pointer hover:bg-white-2 hover:text-primary",
-                value === option.value && "bg-gray-50 font-medium text-primary"
+                value === option.value && "bg-gray-70 font-medium text-primary"
               )}
             >
               {option.label}
