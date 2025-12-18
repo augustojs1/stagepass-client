@@ -34,7 +34,9 @@ export function UserContextProvider({
       }
     }
 
-    loadUser();
+    if (user) {
+      loadUser();
+    }
   }, []);
 
   return (
