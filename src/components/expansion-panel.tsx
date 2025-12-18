@@ -50,7 +50,6 @@ export function ExpansionPanel({
         id={panelId}
         role="region"
         aria-labelledby={buttonId}
-        hidden={!showContent}
         className={`
       transition-all duration-300 ease-in-out overflow-hidden px-4
       ${showContent ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}
