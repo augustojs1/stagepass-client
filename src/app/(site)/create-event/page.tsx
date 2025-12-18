@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function CreateEventPage() {
   return (
-    <section className="max-w-[86rem] m-auto px-[1rem] mb-20">
+    <section className="max-w-[86rem] min-h-[80dvh] m-auto px-[1rem] mb-20">
       <div className="py-[2rem] md:text-left text-center">
         <h1 className="font-logo text-black-3 font-bold text-[2rem]">
           Create an event
