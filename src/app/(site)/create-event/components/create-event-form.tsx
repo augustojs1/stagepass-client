@@ -2,14 +2,28 @@
 
 import React, { FormEvent } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { Image, Info, Plus, MapPin, TicketSlash, Trash2 } from "lucide-react";
+import {
+  Image as ImageIcon,
+  Info,
+  Plus,
+  MapPin,
+  TicketSlash,
+  Trash2,
+} from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { countries } from "@/data";
 import { CreateEventFormData, createEventFormData } from "@/models";
-import { Input, TextArea, Button, Select, ExpansionPanel } from "@/components";
+import {
+  Input,
+  TextArea,
+  Button,
+  Select,
+  ExpansionPanel,
+  UploadDropZone,
+} from "@/components";
 
-export function CreateEventForm() {
+export function CreateEventForm(): React.JSX.Element {
   const {
     control,
     register,
@@ -30,7 +44,6 @@ export function CreateEventForm() {
       ],
     },
   });
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: "tickets",
@@ -40,7 +53,9 @@ export function CreateEventForm() {
     const formData = new FormData();
   };
 
-  function handleAddTicket(event: MouseEvent): void {
+  const handleAddTicket = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ): void => {
     event.preventDefault();
 
     append({
@@ -48,7 +63,7 @@ export function CreateEventForm() {
       quantity: 1,
       price: 0,
     });
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -56,21 +71,12 @@ export function CreateEventForm() {
       <div id="upload-section">
         <ExpansionPanel
           title="Upload cover"
-          preIcon={<Image size={22} className="text-primary" />}
+          preIcon={<ImageIcon size={22} className="text-primary" />}
         >
           <p className="text-[0.8rem] text-gray-3 mb-5">
             Upload the event cover to capture your audience&apos;s attention
           </p>
-          <div className="w-full sm:h-[20rem] h-[12rem] rounded-[6px] bg-gray-1"></div>
-          <div className="flex items-center justify-between mt-6">
-            <p className="text-[0.8rem] text-gray-3">image-02.png</p>
-            <div className="flex gap-3">
-              <Button variant="danger" className="gap-1">
-                <Trash2 size={16} color="#de3b40" /> Remove
-              </Button>
-              <Button variant="secondary">Change</Button>
-            </div>
-          </div>
+          <UploadDropZone />
         </ExpansionPanel>
       </div>
 
