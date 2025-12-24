@@ -48,9 +48,14 @@ export function CreateEventForm(): React.JSX.Element {
     control,
     name: "tickets",
   });
+  const [bannerFile, setBannerFile] = React.useState<File | null>(null);
 
   const onSubmit = async (payload: CreateEventFormData) => {
     const formData = new FormData();
+  };
+
+  const handleSetBannerFile = (file: File): void => {
+    setBannerFile(file);
   };
 
   const handleAddTicket = (
@@ -76,7 +81,7 @@ export function CreateEventForm(): React.JSX.Element {
           <p className="text-[0.8rem] text-gray-3 mb-5">
             Upload the event cover to capture your audience&apos;s attention
           </p>
-          <UploadDropZone />
+          <UploadDropZone setBannerFile={handleSetBannerFile} />
         </ExpansionPanel>
       </div>
 

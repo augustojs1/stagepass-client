@@ -2,9 +2,15 @@ import React from "react";
 import Image from "next/image";
 import { CloudUploadIcon, Trash2 } from "lucide-react";
 
-import { Button } from "./ui/form/button";
+import { Button, ErrorBadge } from "@/components";
 
-export function UploadDropZone(): React.JSX.Element {
+type UploadDropZoneProps = {
+  setBannerFile: (file: File) => void;
+};
+
+export function UploadDropZone({
+  setBannerFile,
+}: UploadDropZoneProps): React.JSX.Element {
   const [isFileBeingDragged, setIsFileBeingDragged] =
     React.useState<boolean>(false);
   const [bannerPreviewUrl, setBannerPreviewUrl] = React.useState<string | null>(
@@ -14,6 +20,20 @@ export function UploadDropZone(): React.JSX.Element {
     null
   );
   const bannerFileInputRef = React.useRef<HTMLInputElement>(null);
+  const [errorMessage, setErrorMessage] = React.useState<string>("");
+  const [displayErrorBadge, setDisplayErrorBadge] =
+    React.useState<boolean>(false);
+
+  const hideErrorBadge = () => {
+    setDisplayErrorBadge(false);
+  };
+
+  const handleFileInputClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ): void => {
+    event.preventDefault();
+    bannerFileInputRef.current?.click();
+  };
 
   const handleOnFileDrop = (event: React.DragEvent<HTMLDivElement>): void => {
     const files = event.dataTransfer.files;
@@ -32,10 +52,25 @@ export function UploadDropZone(): React.JSX.Element {
     reader.readAsDataURL(file);
 
     reader.onloadend = function (e) {
-      if (isValidFileType(file)) {
-        setIsFileBeingDragged(false);
-        setBannerPreviewUrl(e.target!.result as string);
+      if (!isValidFileType(file)) {
+        setErrorMessage(
+          "Invalid file extension. Accepted file formats are: PNG, JPEG and WEBP."
+        );
+        setDisplayErrorBadge(true);
+        return;
       }
+
+      if (!isValidFileSize(file)) {
+        setErrorMessage(
+          "Invalid file size. File size must be lower or equal to 3 MB"
+        );
+        setDisplayErrorBadge(true);
+        return;
+      }
+
+      setIsFileBeingDragged(false);
+      setBannerPreviewUrl(e.target!.result as string);
+      setBannerFile(file);
     };
   };
 
@@ -51,8 +86,16 @@ export function UploadDropZone(): React.JSX.Element {
     }
   };
 
+  const isValidFileSize = (file: File): boolean => {
+    const MAX_FILE_SIZE = 3_000_000;
+
+    return MAX_FILE_SIZE >= file.size;
+  };
+
   const isValidFileType = (file: File): boolean => {
-    return true;
+    const VALID_IMAGE_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+    return VALID_IMAGE_MIME_TYPES.includes(file.type);
   };
 
   const changeBannerPreviewFile = (
@@ -70,7 +113,7 @@ export function UploadDropZone(): React.JSX.Element {
   return (
     <>
       <div
-        className={`w-full sm:h-[20rem] h-[12rem] rounded-[6px] ${
+        className={`w-full sm:h-[20rem] h-[12rem] rounded-[6px] mb-2 ${
           !bannerPreviewUrl ? " border-2 border-primary border-dashed" : ""
         } ${isFileBeingDragged ? "bg-gray-6 opacity-60" : ""}`}
         onDragEnter={(e) => {
@@ -96,6 +139,7 @@ export function UploadDropZone(): React.JSX.Element {
         <input
           id="banner-file-input"
           type="file"
+          accept="image/jpeg,image/png,image/webp"
           ref={bannerFileInputRef}
           onChange={handleBannerFileChange}
           hidden
@@ -114,16 +158,13 @@ export function UploadDropZone(): React.JSX.Element {
         ) : (
           <div className="flex flex-col justify-center items-center h-full gap-2">
             <CloudUploadIcon size={48} color="#636ae8" />
-            <p className="text-[20px] text-gray-3 font-normal">
-              Drag and drop to upload file
-            </p>
-            <p className="text-[20px] text-gray-3 font-normal">or</p>
-            <Button
-              variant="primary"
-              onClick={() => {
-                bannerFileInputRef.current?.click();
-              }}
-            >
+            <div className="hidden md:block text-center">
+              <p className=" text-[20px] text-gray-3 font-normal">
+                Drag and drop to upload file
+              </p>
+              <p className="text-[20px] text-gray-3 font-normal">or</p>
+            </div>
+            <Button variant="primary" onClick={handleFileInputClick}>
               Browse File
             </Button>
           </div>
@@ -149,6 +190,9 @@ export function UploadDropZone(): React.JSX.Element {
           </div>
         </div>
       ) : null}
+      {displayErrorBadge && (
+        <ErrorBadge message={errorMessage} showErrorBadge={hideErrorBadge} />
+      )}
     </>
   );
 }
