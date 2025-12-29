@@ -66,7 +66,6 @@ const CheckboxGroup = ({
               onChange={handleChange}
             />
 
-            {/* Caixa customizada */}
             <span
               className={cn(
                 "w-5 h-5 flex items-center justify-center border rounded transition-all",
