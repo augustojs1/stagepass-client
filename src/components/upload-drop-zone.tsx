@@ -3,6 +3,7 @@ import Image from "next/image";
 import { CloudUploadIcon, Trash2 } from "lucide-react";
 
 import { Button, ErrorBadge } from "@/components";
+import { isValidFileSize, isValidFileType } from "@/lib/utils";
 
 type UploadDropZoneProps = {
   setBannerFile: (file: File) => void;
@@ -84,18 +85,6 @@ export function UploadDropZone({
 
       handleFilePreview(files[0]);
     }
-  };
-
-  const isValidFileSize = (file: File): boolean => {
-    const MAX_FILE_SIZE = 3_000_000;
-
-    return MAX_FILE_SIZE >= file.size;
-  };
-
-  const isValidFileType = (file: File): boolean => {
-    const VALID_IMAGE_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
-
-    return VALID_IMAGE_MIME_TYPES.includes(file.type);
   };
 
   const changeBannerPreviewFile = (
