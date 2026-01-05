@@ -1,12 +1,10 @@
 "use client";
 
 import React, { FormEvent } from "react";
-import Image from "next/image";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import {
   Image as ImageIcon,
   Info,
-  Plus,
   MapPin,
   TicketSlash,
   Trash2,
@@ -51,6 +49,10 @@ export function CreateEventForm(): React.JSX.Element {
     name: "tickets",
   });
   const [bannerFile, setBannerFile] = React.useState<File | null>(null);
+  const [galleryImagesFiles, setGalleryImagesFiles] = React.useState<File[]>(
+    []
+  );
+  const MAX_GALLERY_IMAGES = 6;
 
   const onSubmit = async (payload: CreateEventFormData) => {
     const formData = new FormData();
@@ -58,6 +60,18 @@ export function CreateEventForm(): React.JSX.Element {
 
   const handleSetBannerFile = (file: File): void => {
     setBannerFile(file);
+  };
+
+  const addGalleryImage = (file: File): void => {
+    setGalleryImagesFiles((prev) => [...prev, file]);
+  };
+
+  const removeGalleryImage = (file: File): void => {
+    const filteredImages = galleryImagesFiles.filter(
+      (f) => f.name !== file.name
+    );
+
+    setGalleryImagesFiles(filteredImages);
   };
 
   const handleAddTicket = (
@@ -159,7 +173,13 @@ export function CreateEventForm(): React.JSX.Element {
             <p className="text-[0.8rem] text-gray-3 mb-2">
               Upload images for your event
             </p>
-            <AlbumFilesUpload />
+            <AlbumFilesUpload
+              addGalleryImage={addGalleryImage}
+              removeGalleryImage={removeGalleryImage}
+              hasReachedMaximumGalleryImages={
+                galleryImagesFiles.length >= MAX_GALLERY_IMAGES
+              }
+            />
           </div>
         </ExpansionPanel>
       </div>
