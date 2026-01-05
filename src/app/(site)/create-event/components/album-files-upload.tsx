@@ -6,6 +6,7 @@ import { Plus, XCircle } from "lucide-react";
 
 import { ErrorBadge } from "@/components";
 import { isValidFileSize, isValidFileType } from "@/lib/utils";
+import { truncateText } from "@/lib";
 
 type AlbumFilesUploadProps = {
   addGalleryImage: (file: File) => void;
@@ -131,7 +132,7 @@ export function AlbumFilesUpload({
                 />
               </div>
               <p className="text-[0.8rem] text-black-3 mt-1">
-                {albumFile.file.name}
+                {truncateText(albumFile.file.name, 10)}
               </p>
             </div>
           </div>
