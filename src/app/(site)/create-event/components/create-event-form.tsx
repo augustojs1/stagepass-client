@@ -12,7 +12,11 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { countries } from "@/data";
-import { CreateEventFormData, createEventFormData } from "@/models";
+import {
+  CreateEventFormData,
+  createEventFormData,
+  EventCategory,
+} from "@/models";
 import {
   Input,
   TextArea,
@@ -23,7 +27,18 @@ import {
 } from "@/components";
 import { AlbumFilesUpload } from "./album-files-upload";
 
-export function CreateEventForm(): React.JSX.Element {
+type CreateEventFormProps = {
+  eventCategories: EventCategory[];
+};
+
+export function CreateEventForm({
+  eventCategories,
+}: CreateEventFormProps): React.JSX.Element {
+  const categoryOptions = eventCategories.map((c) => ({
+    value: c.id,
+    label: c.name,
+  }));
+
   const {
     control,
     register,
@@ -149,20 +164,7 @@ export function CreateEventForm(): React.JSX.Element {
                 <Select
                   label="Category"
                   placeholder="Select a category"
-                  options={[
-                    {
-                      label: "Music",
-                      value: "music",
-                    },
-                    {
-                      label: "Business",
-                      value: "business",
-                    },
-                    {
-                      label: "Photograpy",
-                      value: "photography",
-                    },
-                  ]}
+                  options={categoryOptions}
                   value={field.value}
                   onChange={field.onChange}
                   error={errors.category?.message}

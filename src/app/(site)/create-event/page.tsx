@@ -1,13 +1,16 @@
 import { Metadata } from "next";
 
 import { CreateEventNavigation, CreateEventForm } from "./components";
+import { getEventCategories } from "@/actions";
 
 export const metadata: Metadata = {
   title: "StagePass | Create Event",
   description: "Create Event",
 };
 
-export default function CreateEventPage() {
+export default async function CreateEventPage() {
+  const response = await getEventCategories();
+
   return (
     <section className="max-w-[86rem] min-h-[80dvh] m-auto px-[1rem] mb-20">
       <div className="py-[2rem] md:text-left text-center">
@@ -18,7 +21,7 @@ export default function CreateEventPage() {
       <div className="grid grid-cols-1 md:[grid-template-columns:minmax(0,4fr)_minmax(0,8fr)] lg:gap-20 md:gap-15 gap-4 justify-center">
         <CreateEventNavigation />
         <div>
-          <CreateEventForm />
+          <CreateEventForm eventCategories={response.data || []} />
         </div>
       </div>
     </section>
