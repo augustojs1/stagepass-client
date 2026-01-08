@@ -24,6 +24,7 @@ import {
   Select,
   ExpansionPanel,
   UploadDropZone,
+  MoneyInput,
 } from "@/components";
 import { AlbumFilesUpload } from "./album-files-upload";
 
@@ -43,34 +44,53 @@ export function CreateEventForm({
     control,
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    watch,
+    trigger,
+    formState: { errors, isSubmitting, touchedFields, isSubmitted },
   } = useForm<CreateEventFormData>({
     resolver: zodResolver(createEventFormData),
     mode: "onChange",
     defaultValues: {
-      category: "",
-      country: "",
-      tickets: [
+      event_category_id: "",
+      country_id: "",
+      event_tickets: [
         {
           name: "",
           quantity: 0,
-          price: 0,
+          amount: 0,
         },
       ],
     },
   });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "tickets",
+    name: "event_tickets",
   });
+  const starts_at = watch("starts_at");
+  const startHour = watch("startHour");
+  const ends_at = watch("ends_at");
+  const endHour = watch("endHour");
+
   const [bannerFile, setBannerFile] = React.useState<File | null>(null);
   const [galleryImagesFiles, setGalleryImagesFiles] = React.useState<File[]>(
     []
   );
   const MAX_GALLERY_IMAGES = 6;
 
+  React.useEffect(() => {
+    void trigger(["ends_at", "endHour"]);
+  }, [starts_at, startHour, trigger]);
+
+  React.useEffect(() => {
+    void trigger(["starts_at", "startHour"]);
+  }, [ends_at, endHour, trigger]);
+
   const onSubmit = async (payload: CreateEventFormData) => {
     const formData = new FormData();
+
+    console.log("payload.:", payload);
+    console.log("bannerFile.:", bannerFile);
+    console.log("galleryImagesFiles.:", galleryImagesFiles);
   };
 
   const handleSetBannerFile = (file: File): void => {
@@ -97,8 +117,18 @@ export function CreateEventForm({
     append({
       name: "",
       quantity: 1,
-      price: 0,
+      amount: 0,
     });
+  };
+
+  const getMinDate = (): string => {
+    const today = new Date();
+    const year = today.getFullYear();
+
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate() + 1).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -158,7 +188,7 @@ export function CreateEventForm({
               Choose the category for your event
             </p>
             <Controller
-              name="category"
+              name="event_category_id"
               control={control}
               render={({ field }) => (
                 <Select
@@ -167,7 +197,7 @@ export function CreateEventForm({
                   options={categoryOptions}
                   value={field.value}
                   onChange={field.onChange}
-                  error={errors.category?.message}
+                  error={errors.event_category_id?.message}
                 ></Select>
               )}
             />
@@ -210,16 +240,16 @@ export function CreateEventForm({
                 label="Neighborhood"
                 placeholder="Neighborhood"
                 type="text"
-                {...register("neighborhood")}
-                error={errors.neighborhood?.message}
+                {...register("address_neighborhood")}
+                error={errors.address_neighborhood?.message}
                 maxLength={30}
               />
               <Input
                 label="Complement"
                 placeholder="Complement"
                 type="text"
-                {...register("number")}
-                error={errors.number?.message}
+                {...register("address_number")}
+                error={errors.address_number?.message}
                 maxLength={20}
               />
             </div>
@@ -228,20 +258,20 @@ export function CreateEventForm({
                 label="Address"
                 placeholder="Address"
                 type="text"
-                {...register("address")}
-                error={errors.address?.message}
+                {...register("address_street")}
+                error={errors.address_street?.message}
                 maxLength={30}
               />
               <Input
                 label="District"
                 placeholder="District"
                 type="text"
-                {...register("district")}
-                error={errors.district?.message}
+                {...register("address_district")}
+                error={errors.address_district?.message}
                 maxLength={30}
               />
               <Controller
-                name="country"
+                name="country_id"
                 control={control}
                 render={({ field }) => (
                   <Select
@@ -250,7 +280,7 @@ export function CreateEventForm({
                     options={countries}
                     value={field.value}
                     onChange={field.onChange}
-                    error={errors.country?.message}
+                    error={errors.country_id?.message}
                   />
                 )}
               />
@@ -265,14 +295,24 @@ export function CreateEventForm({
               <Input
                 label="Start Date"
                 type="date"
-                {...register("startDate")}
-                error={errors.startDate?.message}
+                min={getMinDate()}
+                {...register("starts_at")}
+                error={
+                  touchedFields.starts_at || isSubmitted
+                    ? errors.starts_at?.message
+                    : undefined
+                }
               />
               <Input
                 label="End Date"
                 type="date"
-                {...register("endDate")}
-                error={errors.endDate?.message}
+                min={getMinDate()}
+                {...register("ends_at")}
+                error={
+                  touchedFields.ends_at || isSubmitted
+                    ? errors.ends_at?.message
+                    : undefined
+                }
               />
             </div>
             <div className="flex flex-col gap-7 md:gap-4">
@@ -280,14 +320,22 @@ export function CreateEventForm({
                 label="Start Time"
                 type="time"
                 {...register("startHour")}
-                error={errors.startHour?.message}
+                error={
+                  touchedFields.startHour || isSubmitted
+                    ? errors.startHour?.message
+                    : undefined
+                }
               />
               <Input
                 label="End Time"
                 placeholder="District"
                 type="time"
                 {...register("endHour")}
-                error={errors.endHour?.message}
+                error={
+                  touchedFields.endHour || isSubmitted
+                    ? errors.endHour?.message
+                    : undefined
+                }
               />
             </div>
           </div>
@@ -310,26 +358,30 @@ export function CreateEventForm({
                   label="Name"
                   placeholder={`Batch #${index + 1}`}
                   type="text"
-                  {...register(`tickets.${index}.name`)}
-                  error={errors.tickets?.[index]?.name?.message}
+                  {...register(`event_tickets.${index}.name`)}
+                  error={errors.event_tickets?.[index]?.name?.message}
                 />
                 <Input
                   label="Quantity"
                   placeholder="0"
                   type="number"
-                  {...register(`tickets.${index}.quantity`, {
+                  {...register(`event_tickets.${index}.quantity`, {
                     valueAsNumber: true,
                   })}
-                  error={errors.tickets?.[index]?.quantity?.message}
+                  error={errors.event_tickets?.[index]?.quantity?.message}
                 />
-                <Input
-                  label="Price $"
-                  placeholder="$ 0.00"
-                  type="number"
-                  {...register(`tickets.${index}.price`, {
-                    valueAsNumber: true,
-                  })}
-                  error={errors.tickets?.[index]?.price?.message}
+                <Controller
+                  name={`event_tickets.${index}.amount`}
+                  control={control}
+                  render={({ field }) => (
+                    <MoneyInput
+                      label="Price"
+                      placeholder="$ 0.00"
+                      value={field.value ?? 0}
+                      onChange={field.onChange}
+                      error={errors.event_tickets?.[index]?.amount?.message}
+                    />
+                  )}
                 />
                 <div className="flex justify-center">
                   {index >= 1 ? (

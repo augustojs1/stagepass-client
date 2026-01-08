@@ -11,3 +11,4 @@ export * from "./ui/layouts/header";
 export * from "./expansion-panel";
 export * from "./ui/form/select";
 export * from "./upload-drop-zone";
+export * from "./ui/form/money-input";
