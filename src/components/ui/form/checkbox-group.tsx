@@ -29,6 +29,7 @@ const CheckboxGroup = ({
 }: CheckboxGroupProps) => {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { checked, value: optionValue } = e.target;
+
     if (checked) {
       setValue([...value, optionValue]);
     } else {

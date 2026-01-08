@@ -35,6 +35,7 @@ export const createEventFormData = z
     startHour: z.string().min(1, "Start hour is required."),
     ends_at: z.string().min(1, "End date is required."),
     endHour: z.string().min(1, "End hour is required."),
+    is_free: z.boolean().default(false),
     event_tickets: z
       .array(ticketSchema)
       .min(1, "At least one ticket is required"),

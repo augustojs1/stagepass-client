@@ -27,6 +27,7 @@ import {
   MoneyInput,
 } from "@/components";
 import { AlbumFilesUpload } from "./album-files-upload";
+import Checkbox from "@/components/ui/form/checkbox";
 
 type CreateEventFormProps = {
   eventCategories: EventCategory[];
@@ -51,6 +52,7 @@ export function CreateEventForm({
     resolver: zodResolver(createEventFormData),
     mode: "onChange",
     defaultValues: {
+      is_free: false,
       event_category_id: "",
       country_id: "",
       event_tickets: [
@@ -70,6 +72,7 @@ export function CreateEventForm({
   const startHour = watch("startHour");
   const ends_at = watch("ends_at");
   const endHour = watch("endHour");
+  const isFree = watch("is_free");
 
   const [bannerFile, setBannerFile] = React.useState<File | null>(null);
   const [galleryImagesFiles, setGalleryImagesFiles] = React.useState<File[]>(
@@ -348,66 +351,81 @@ export function CreateEventForm({
           title="Tickets"
           preIcon={<TicketSlash size={22} color="#636ae8" />}
         >
-          {fields.map((field, index) => (
-            <div key={field.id}>
-              <p className="font-bold text-[1.2rem] text-black-3 mt-5">
-                Ticket #{index + 1}
-              </p>
-              <div className="flex flex-col xl:flex-row items-center xl:gap-5 gap-2 mt-2">
-                <Input
-                  label="Name"
-                  placeholder={`Batch #${index + 1}`}
-                  type="text"
-                  {...register(`event_tickets.${index}.name`)}
-                  error={errors.event_tickets?.[index]?.name?.message}
+          <div className="mt-6 mb-8">
+            <Controller
+              name="is_free"
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  label="This event is free"
+                  checked={field.value}
+                  onChange={field.onChange}
+                  name={field.name}
                 />
-                <Input
-                  label="Quantity"
-                  placeholder="0"
-                  type="number"
-                  {...register(`event_tickets.${index}.quantity`, {
-                    valueAsNumber: true,
-                  })}
-                  error={errors.event_tickets?.[index]?.quantity?.message}
-                />
-                <Controller
-                  name={`event_tickets.${index}.amount`}
-                  control={control}
-                  render={({ field }) => (
-                    <MoneyInput
-                      label="Price"
-                      placeholder="$ 0.00"
-                      value={field.value ?? 0}
-                      onChange={field.onChange}
-                      error={errors.event_tickets?.[index]?.amount?.message}
-                    />
-                  )}
-                />
-                <div className="flex justify-center">
-                  {index >= 1 ? (
-                    <Button
-                      variant="danger"
-                      className="gap-1"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        remove(index);
-                      }}
-                    >
-                      <Trash2 size={16} color="#de3b40" /> Remove
-                    </Button>
-                  ) : (
-                    <Button variant="danger" className="invisible gap-1">
-                      <Trash2 size={16} color="#de3b40" /> Remove
-                    </Button>
-                  )}
+              )}
+            />
+            {fields.map((field, index) => (
+              <div key={field.id}>
+                <p className="font-bold text-[1.2rem] text-black-3 mt-5">
+                  Ticket #{index + 1}
+                </p>
+                <div className="flex flex-col xl:flex-row items-center xl:gap-5 gap-2 mt-2">
+                  <Input
+                    label="Name"
+                    placeholder={`Batch #${index + 1}`}
+                    type="text"
+                    {...register(`event_tickets.${index}.name`)}
+                    error={errors.event_tickets?.[index]?.name?.message}
+                  />
+                  <Input
+                    label="Quantity"
+                    placeholder="0"
+                    type="number"
+                    {...register(`event_tickets.${index}.quantity`, {
+                      valueAsNumber: true,
+                    })}
+                    error={errors.event_tickets?.[index]?.quantity?.message}
+                  />
+                  <Controller
+                    name={`event_tickets.${index}.amount`}
+                    control={control}
+                    render={({ field }) => (
+                      <MoneyInput
+                        label="Price"
+                        placeholder="$ 0.00"
+                        value={isFree ? 0 : field.value ?? 0}
+                        onChange={field.onChange}
+                        disabled={isFree}
+                        error={errors.event_tickets?.[index]?.amount?.message}
+                      />
+                    )}
+                  />
+                  <div className="flex justify-center">
+                    {index >= 1 ? (
+                      <Button
+                        variant="danger"
+                        className="gap-1"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          remove(index);
+                        }}
+                      >
+                        <Trash2 size={16} color="#de3b40" /> Remove
+                      </Button>
+                    ) : (
+                      <Button variant="danger" className="invisible gap-1">
+                        <Trash2 size={16} color="#de3b40" /> Remove
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
+            ))}
+            <div className="flex justify-center mt-8 md:mt-0">
+              <Button variant="secondary" onClick={handleAddTicket}>
+                + Add ticket
+              </Button>
             </div>
-          ))}
-          <div className="flex justify-center mt-8 md:mt-0">
-            <Button variant="secondary" onClick={handleAddTicket}>
-              + Add ticket
-            </Button>
           </div>
         </ExpansionPanel>
       </div>
